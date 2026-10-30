@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TikSave</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: one centered column, input on top, result card below */
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --fg:#14151a; --muted:#6b6f7b;
+  --line:#e2e4ea; --cyan:#13c6c9; --pink:#fe2c55; --ok:#12a35a; --err:#d93a3a;
+  --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e0f13; --surface:#181a20; --fg:#eef0f4; --muted:#9298a6;
+    --line:#2a2d36; --cyan:#25f4ee; --pink:#fe2c55; --ok:#3ccf7f; --err:#ff6b6b; color-scheme:dark }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.5;
+  padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{margin:0;font-size:2rem;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+h1 span{color:var(--pink);text-shadow:2px 2px 0 var(--cyan)}
+.sub{margin:4px 0 0;color:var(--muted)}
+form{display:flex;gap:8px;flex-wrap:wrap}
+input{flex:1 1 260px;min-width:0;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--surface);color:var(--fg);font:inherit}
+input:focus{outline:none;border-color:var(--cyan)}
+button,.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:14px 18px;cursor:pointer;
+  text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+button:focus-visible,.btn:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+.primary{background:var(--pink);color:#fff}
+.primary:disabled{opacity:.6;cursor:wait}
+.ghost{background:transparent;color:var(--fg);border:1.5px solid var(--line)}
+.status{min-height:1.5em;font-size:.95rem;color:var(--muted)}
+.status.err{color:var(--err)} .status.ok{color:var(--ok)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;
+  grid-template-columns:110px 1fr;gap:16px}
+.card img{width:110px;aspect-ratio:9/16;object-fit:cover;border-radius:10px;background:var(--line);max-width:100%}
+.meta{min-width:0;display:flex;flex-direction:column;gap:6px}
+.author{font-weight:700}
+.title{color:var(--muted);font-size:.9rem;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.stats{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.actions{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.vid{background:var(--fg);color:var(--bg)}
+.mp3{background:var(--cyan);color:#0b1a1a}
+.note{font-size:.8rem;color:var(--muted)}
+@media (max-width:420px){.card{grid-template-columns:80px 1fr}.card img{width:80px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Tik<span>Save</span></h1>
+    <p class="sub">Dán link TikTok để tải video không logo hoặc tách nhạc MP3.</p>
+  </header>
+
+  <form id="f">
+    <input id="url" type="url" inputmode="url" placeholder="https://www.tiktok.com/@user/video/..." required>
+    <button class="ghost" type="button" id="paste">Dán</button>
+    <button class="primary" type="submit" id="go">Lấy link</button>
+  </form>
+
+  <div class="status" id="status" role="status"></div>
+  <div id="result"></div>
+
+  <p class="note">Dữ liệu lấy qua API công khai của tikwm.com. Chỉ nên tải video để dùng cá nhân và tôn trọng bản quyền của người sáng tạo.</p>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const status = (msg, cls="") => { const el=$("#status"); el.textContent=msg; el.className="status "+cls; };
+const fmt = n => n==null ? "-" : Intl.NumberFormat("vi-VN",{notation:"compact"}).format(n);
+const safe = s => (s||"tiktok").replace(/[\\/:*?"<>|#]+/g,"").trim().slice(0,60) || "tiktok";
+const abs = u => !u ? "" : u.startsWith("http") ? u : "https://www.tikwm.com" + u;
+
+$("#paste").onclick = async () => {
+  try { $("#url").value = (await navigator.clipboard.readText()).trim(); }
+  catch { $("#url").focus(); status("Không đọc được clipboard, hãy dán thủ công (giữ để dán).", "err"); }
+};
+
+$("#f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const link = $("#url").value.trim();
+  if (!/tiktok\.com/i.test(link)) return status("Link này không phải link TikTok.", "err");
+  $("#go").disabled = true; $("#result").innerHTML = ""; status("Đang lấy thông tin video…");
+  try {
+    const body = new URLSearchParams({ url: link, hd: "1" });
+    const r = await fetch("https://www.tikwm.com/api/", { method: "POST", body });
+    const j = await r.json();
+    if (j.code !== 0 || !j.data) throw new Error(j.msg || "Không tìm thấy video");
+    render(j.data); status("Xong! Chọn định dạng muốn tải.", "ok");
+  } catch (err) {
+    status("Lỗi: " + err.message + ". Kiểm tra lại link hoặc thử lại sau vài giây.", "err");
+  } finally { $("#go").disabled = false; }
+});
+
+function render(d){
+  const name = safe(d.title || d.id);
+  const video = abs(d.hdplay || d.play), music = abs(d.music);
+  const box = document.createElement("div"); box.className = "card";
+  box.innerHTML = `
+    <img alt="Ảnh bìa video">
+    <div class="meta">
+      <div class="author"></div>
+      <div class="title"></div>
+      <div class="stats">▶ ${fmt(d.play_count)} · ♥ ${fmt(d.digg_count)} · ${d.duration||0}s</div>
+    </div>
+    <div class="actions">
+      <button class="btn vid" data-u="${video}" data-n="${name}.mp4">Tải video (không logo)</button>
+      ${music ? `<button class="btn mp3" data-u="${music}" data-n="${name}.mp3">Tải âm thanh MP3</button>` : ""}
+    </div>`;
+  box.querySelector("img").src = abs(d.cover);
+  box.querySelector(".author").textContent = "@" + (d.author?.unique_id || "unknown");
+  box.querySelector(".title").textContent = d.title || "";
+  box.querySelectorAll("button[data-u]").forEach(b => b.onclick = () => download(b));
+  $("#result").replaceChildren(box);
+}
+
+async function download(btn){
+  const { u, n } = btn.dataset, label = btn.textContent;
+  btn.disabled = true; btn.textContent = "Đang tải…";
+  try {
+    const r = await fetch(u);
+    if (!r.ok) throw 0;
+    const blob = await r.blob();
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: n });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    status("Đã lưu " + n, "ok");
+  } catch {
+    // Nếu server chặn tải trực tiếp, mở file ở tab mới để lưu thủ công
+    window.open(u, "_blank", "noopener");
+    status("Đã mở file ở tab mới. Bấm ⋮ hoặc giữ vào video/nhạc rồi chọn Tải xuống.", "ok");
+  } finally { btn.disabled = false; btn.textContent = label; }
+}
+</script>
+</body>
+</html>

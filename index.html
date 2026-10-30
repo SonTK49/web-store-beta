@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Web Store</title>
+<meta name="description" content="Cửa hàng game và tiện ích HTML do bạn bè cùng đóng góp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: App-Store style — header + search, segment tabs, featured banner, app grid; detail sheet; full-screen player. */
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#111318; --muted:#646B78; --line:#E3E6EB;
+  --accent:#0A6CFF; --accent-soft:#E6F0FF; --scrim:rgba(10,12,16,.5);
+  --shadow:0 1px 2px rgba(17,19,24,.06),0 8px 24px -12px rgba(17,19,24,.25);
+  --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0C0D10; --surface:#17191E; --ink:#EEF0F4; --muted:#949AA6; --line:#272A31;
+  --accent:#4C94FF; --accent-soft:#16233A; --scrim:rgba(0,0,0,.65);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.8); color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--font)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding:24px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left))}
+
+header{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0A6CFF,#8B5CF6);display:grid;place-items:center;color:#fff;box-shadow:var(--shadow)}
+.logo svg{width:24px;height:24px}
+h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em}
+.addbtn{text-decoration:none;order:2}
+.search{order:3;flex:1 1 100%;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 12px}
+@media (min-width:700px){.search{order:2;flex:1 1 280px;max-width:420px;margin-left:auto}.addbtn{order:3}}
+.search svg{width:18px;height:18px;color:var(--muted);flex:none}
+.search input{border:0;background:transparent;outline:none;padding:11px 0;width:100%;min-width:0}
+
+.tabs{display:inline-flex;background:var(--line);border-radius:11px;padding:3px;gap:2px;margin-bottom:24px}
+.tab{border:0;background:transparent;padding:7px 16px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+.featured{position:relative;overflow:hidden;border-radius:20px;padding:26px;margin-bottom:32px;color:#fff;display:flex;gap:20px;align-items:center;cursor:pointer;border:0;width:100%;text-align:left;box-shadow:var(--shadow)}
+.featured .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.35}
+.featured>*{position:relative}
+.featured .eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.featured h2{margin:4px 0 6px;font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.15;text-wrap:balance}
+.featured p{margin:0;opacity:.9;max-width:52ch}
+.featured .icon{width:96px;height:96px;font-size:38px;flex:none;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+@media (max-width:520px){.featured{flex-direction:column;align-items:flex-start;padding:20px}.featured .icon{width:72px;height:72px;font-size:28px}}
+
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 12px}
+.section-head h3{margin:0;font-size:20px;font-weight:800;letter-spacing:-.01em}
+.section-head span{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:4px 24px}
+@media (max-width:400px){.grid{grid-template-columns:1fr}}
+.row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);min-width:0}
+.row .info{flex:1;min-width:0;cursor:pointer}
+.row .name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .sub{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon{width:64px;height:64px;border-radius:22%;flex:none;display:grid;place-items:center;overflow:hidden;color:#fff;font-weight:800;font-size:24px;letter-spacing:-.03em;cursor:pointer;border:0;padding:0}
+.icon img{width:100%;height:100%;object-fit:cover}
+.get{border:0;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;padding:6px 18px;border-radius:999px;cursor:pointer;flex:none}
+.get:hover{filter:brightness(.97)}
+.get.solid{background:var(--accent);color:#fff;padding:9px 26px;font-size:15px}
+.ghost{border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600;padding:8px 18px;border-radius:999px;cursor:pointer;text-decoration:none;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+
+.empty,.error{border:2px dashed var(--line);border-radius:16px;padding:36px 20px;text-align:center;color:var(--muted)}
+.contrib{margin-top:40px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+.contrib b{display:block;font-size:16px}
+.contrib p{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+/* detail sheet */
+.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:640px){.scrim{align-items:center}}
+.sheet{background:var(--surface);width:min(560px,100%);max-height:90vh;overflow:auto;border-radius:20px 20px 0 0;padding:22px 22px calc(22px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+@media (min-width:640px){.sheet{border-radius:20px}}
+.sheet .top{display:flex;gap:16px;align-items:center}
+.sheet .icon{width:96px;height:96px;font-size:36px;cursor:default}
+.sheet h2{margin:0;font-size:22px;font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+.sheet .sub{color:var(--muted);font-size:14px}
+.sheet .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.sheet .cover{width:100%;border-radius:14px;margin-top:18px;display:block;aspect-ratio:16/9;object-fit:cover;background:var(--line)}
+.sheet .desc{margin:16px 0 0;white-space:pre-line}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:18px;border-top:1px solid var(--line);padding-top:14px;text-align:center}
+.facts div{font-size:12px;color:var(--muted);min-width:0}
+.facts b{display:block;font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.close{position:sticky;top:0;float:right;border:0;background:var(--line);width:32px;height:32px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
+.close svg{width:16px;height:16px}
+
+/* player */
+.player{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}
+.pbar{display:flex;align-items:center;gap:10px;padding:8px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));padding-top:max(8px,env(safe-area-inset-top));background:var(--surface);border-bottom:1px solid var(--line)}
+.pbar .t{flex:1;min-width:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pbar .icon{width:30px;height:30px;font-size:13px;border-radius:8px;cursor:default}
+.player iframe{flex:1;width:100%;border:0;background:#fff}
+@media (max-width:480px){.pbar .ghost span{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16l-1.5 12a2 2 0 0 1-2 1.8h-9a2 2 0 0 1-2-1.8L4 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></div>
+      <h1>Web Store</h1>
+    </div>
+    <a class="get addbtn" href="submit.html">+ Gửi app</a>
+    <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Tìm game, tiện ích…" aria-label="Tìm kiếm"></label>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-type="all" aria-selected="true">Tất cả</button>
+    <button class="tab" role="tab" data-type="game" aria-selected="false">Game</button>
+    <button class="tab" role="tab" data-type="tool" aria-selected="false">Tiện ích</button>
+  </div>
+
+  <main id="main"></main>
+
+  <section class="contrib">
+    <div><b>Có game hay tiện ích muốn chia sẻ?</b><p>Kéo thả thư mục app vào trang gửi app. Không cần tài khoản GitHub, chỉ cần mã mời.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="get solid" href="submit.html" style="text-decoration:none">Gửi app</a>
+      <a class="ghost" id="contribLink" href="CONTRIBUTING.md" target="_blank" rel="noopener">Hướng dẫn</a>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const TYPE = { game: "Game", tool: "Tiện ích" };
+let APPS = [], filter = "all", query = "";
+
+// Link "Hướng dẫn đóng góp" trỏ thẳng tới repo khi chạy trên <user>.github.io/<repo>/
+const gh = location.hostname.match(/^([^.]+)\.github\.io$/i);
+if (gh) {
+  const repo = location.pathname.split("/").filter(Boolean)[0] || `${gh[1]}.github.io`;
+  $("#contribLink").href = `https://github.com/${gh[1]}/${repo}/blob/main/CONTRIBUTING.md`;
+}
+
+function hue(str){ let h = 0; for (const c of str) h = (h * 31 + c.charCodeAt(0)) % 360; return h; }
+function tint(a){ return a.color || `hsl(${hue(a.id)} 65% 50%)`; }
+function initials(t){ const w = t.replace(/[^\p{L}\p{N} ]/gu, "").trim().split(/\s+/); return ((w[0]?.[0] || "?") + (w[1]?.[0] || "")).toUpperCase(); }
+function iconHTML(a, tag = "div", attrs = ""){
+  const bg = `background:linear-gradient(140deg,${tint(a)},color-mix(in srgb,${tint(a)} 60%,#000))`;
+  return `<${tag} class="icon" style="${bg}" ${attrs}>${a.icon ? `<img src="${esc(a.icon)}" alt="" loading="lazy">` : esc(initials(a.title))}</${tag}>`;
+}
+const sub = a => [a.category || TYPE[a.type], a.author && "bởi " + a.author].filter(Boolean).join(" · ");
+const date = t => t ? new Date(t).toLocaleDateString("vi-VN") : "—";
+
+function visible(){
+  const q = query.toLowerCase();
+  return APPS.filter(a => (filter === "all" || a.type === filter) &&
+    (!q || [a.title, a.category, a.description, a.author].join(" ").toLowerCase().includes(q)));
+}
+
+function render(){
+  const list = visible(), main = $("#main");
+  if (!APPS.length) { main.innerHTML = `<div class="empty">Cửa hàng chưa có app nào. Hãy là người đầu tiên đóng góp!</div>`; return; }
+  const feat = !query && list[0];
+  const rest = feat ? list.slice(1) : list;
+  main.innerHTML = (feat ? `
+    <button class="featured" data-open="${esc(feat.id)}" style="background:linear-gradient(120deg,${tint(feat)},color-mix(in srgb,${tint(feat)} 45%,#000))">
+      ${feat.cover ? `<img class="bgimg" src="${esc(feat.cover)}" alt="">` : ""}
+      ${iconHTML(feat)}
+      <div><div class="eyebrow">Mới nhất · ${esc(TYPE[feat.type])}</div><h2>${esc(feat.title)}</h2><p>${esc(feat.description)}</p></div>
+    </button>` : "") + `
+    <div class="section-head"><h3>${query ? "Kết quả tìm kiếm" : filter === "all" ? "Tất cả ứng dụng" : TYPE[filter]}</h3><span>${list.length} app</span></div>
+    ${rest.length || feat ? `<div class="grid">${rest.map(a => `
+      <div class="row">
+        ${iconHTML(a, "button", `data-open="${esc(a.id)}" aria-label="Xem ${esc(a.title)}"`)}
+        <div class="info" data-open="${esc(a.id)}"><div class="name">${esc(a.title)}</div><div class="sub">${esc(sub(a))}</div></div>
+        <button class="get" data-play="${esc(a.id)}">Mở</button>
+      </div>`).join("")}</div>` : `<div class="empty">Không tìm thấy app phù hợp.</div>`}`;
+}
+
+function showDetail(a){
+  closeAll();
+  const el = document.createElement("div");
+  el.className = "scrim"; el.id = "sheet";
+  el.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(a.title)}">
+    <button class="close" data-close aria-label="Đóng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    <div class="top">${iconHTML(a)}<div style="min-width:0"><h2>${esc(a.title)}</h2><div class="sub">${esc(sub(a))}</div>
+      <div class="btns"><button class="get solid" data-play="${esc(a.id)}">Mở</button><a class="ghost" href="${esc(a.path)}" target="_blank" rel="noopener">Tab mới ↗</a></div></div></div>
+    ${a.cover ? `<img class="cover" src="${esc(a.cover)}" alt="Ảnh minh họa ${esc(a.title)}">` : ""}
+    ${a.description ? `<p class="desc">${esc(a.description)}</p>` : ""}
+    <div class="facts"><div><b>${esc(TYPE[a.type])}</b>Loại</div><div><b>${esc(a.author || "—")}</b>Tác giả</div><div><b>${date(a.updated || a.added)}</b>Cập nhật</div></div>
+  </div>`;
+  el.addEventListener("click", e => { if (e.target === el || e.target.closest("[data-close]")) go(""); });
+  document.body.append(el); $(".get", el).focus();
+}
+
+function showPlayer(a){
+  closeAll();
+  const el = document.createElement("div");
+  el.className = "player"; el.id = "player";
+  el.innerHTML = `<div class="pbar">
+      <button class="ghost" data-close aria-label="Quay lại">← <span>Cửa hàng</span></button>
+      ${iconHTML(a)}<div class="t">${esc(a.title)}</div>
+      <a class="ghost" href="${esc(a.path)}" target="_blank" rel="noopener">↗ <span>Tab mới</span></a></div>
+    <iframe src="${esc(a.path)}" title="${esc(a.title)}" allow="fullscreen; autoplay; clipboard-read; clipboard-write; gamepad" allowfullscreen></iframe>`;
+  $("[data-close]", el).onclick = () => go("");
+  document.body.append(el); document.body.style.overflow = "hidden";
+  document.title = a.title + " · Web Store";
+}
+
+function closeAll(){ $("#sheet")?.remove(); $("#player")?.remove(); document.body.style.overflow = ""; document.title = "Web Store"; }
+
+// Định tuyến bằng hash: #/app/<id> (chi tiết), #/play/<id> (chạy) — link chia sẻ được, nút Back hoạt động
+function go(h){ location.hash = h; }
+function route(){
+  const [, view, id] = location.hash.match(/^#\/(app|play)\/(.+)$/) || [];
+  const a = id && APPS.find(x => x.id === decodeURIComponent(id));
+  if (!a) return closeAll();
+  view === "play" ? showPlayer(a) : showDetail(a);
+}
+
+document.addEventListener("click", e => {
+  const p = e.target.closest("[data-play]"), o = e.target.closest("[data-open]");
+  if (p) go("/play/" + p.dataset.play); else if (o) go("/app/" + o.dataset.open);
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#sheet")) go(""); });
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
+  filter = t.dataset.type;
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
+  render();
+});
+$("#q").addEventListener("input", e => { query = e.target.value.trim(); render(); });
+addEventListener("hashchange", route);
+
+fetch("apps.json", { cache: "no-cache" })
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(d => { APPS = d.apps || []; render(); route(); })
+  .catch(() => {
+    $("#main").innerHTML = `<div class="error">Không tải được danh sách app (apps.json).<br>
+      Nếu bạn đang mở file trực tiếp trên máy, hãy chạy thử bằng một web server, hoặc xem trên GitHub Pages.</div>`;
+  });
+</script>
+</body>
+</html>

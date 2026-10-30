@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gửi app · Web Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<script src="config.js"></script>
+<style>
+/* Layout: single column form — 1 drop zone, 2 app info with live icon preview, 3 invite code + send; progress/result replace the form. */
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#111318; --muted:#646B78; --line:#E3E6EB; --field:#F7F8FA;
+  --accent:#0A6CFF; --accent-soft:#E6F0FF; --ok:#14894B; --ok-soft:#E5F5EC; --warn:#9A6200; --warn-soft:#FFF4DB; --err:#C9302C; --err-soft:#FDECEC;
+  --shadow:0 1px 2px rgba(17,19,24,.06),0 8px 24px -12px rgba(17,19,24,.25);
+  --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0C0D10; --surface:#17191E; --ink:#EEF0F4; --muted:#949AA6; --line:#272A31; --field:#1E2127;
+  --accent:#4C94FF; --accent-soft:#16233A; --ok:#4CC98A; --ok-soft:#123222; --warn:#F2B84B; --warn-soft:#33270F; --err:#FF7B73; --err-soft:#3A1B1B;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.8); color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--font)}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right)) 64px max(16px,env(safe-area-inset-left))}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--accent);text-decoration:none;font-weight:600;font-size:14px}
+h1{margin:10px 0 4px;font-size:clamp(26px,5vw,34px);font-weight:800;letter-spacing:-.02em}
+.lead{margin:0 0 22px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.step{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:17px;font-weight:800}
+.num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+.card.off{opacity:.5;pointer-events:none}
+
+.drop{border:2px dashed var(--line);border-radius:14px;padding:30px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;transition:border-color .15s,background .15s}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop svg{width:40px;height:40px;color:var(--accent)}
+.drop b{font-size:16px}
+.drop small{color:var(--muted)}
+.pick{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 18px;font-weight:600;cursor:pointer;font-size:14px}
+.btn.primary{background:var(--accent);border-color:transparent;color:#fff;padding:12px 26px;font-size:16px}
+.btn.primary:disabled{opacity:.5;cursor:not-allowed}
+.btn.link{border:0;background:none;color:var(--accent);padding:4px 0}
+
+.loaded{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.loaded .what{flex:1;min-width:0}
+.loaded .what b{display:block;overflow-wrap:anywhere}
+.loaded .what span{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+details.files{margin-top:12px;font-size:13px;color:var(--muted)}
+details.files summary{cursor:pointer;font-weight:600}
+details.files ul{margin:8px 0 0;padding-left:18px;max-height:180px;overflow:auto;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.msg{border-radius:12px;padding:10px 14px;font-size:14px;margin-top:12px}
+.msg.warn{background:var(--warn-soft);color:var(--warn)}
+.msg.err{background:var(--err-soft);color:var(--err)}
+.msg.ok{background:var(--ok-soft);color:var(--ok)}
+.msg.info{background:var(--accent-soft);color:var(--accent)}
+.msg ul{margin:6px 0 0;padding-left:18px}
+.msg code{font-size:12px;overflow-wrap:anywhere}
+
+.info{display:grid;grid-template-columns:120px 1fr;gap:18px}
+@media (max-width:560px){.info{grid-template-columns:1fr}}
+.iconcol{display:flex;flex-direction:column;align-items:center;gap:8px}
+.icon{width:104px;height:104px;border-radius:24px;display:grid;place-items:center;overflow:hidden;color:#fff;font-weight:800;font-size:38px;letter-spacing:-.03em;box-shadow:var(--shadow)}
+.icon img{width:100%;height:100%;object-fit:cover}
+.iconcol small{color:var(--muted);font-size:12px;text-align:center}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field.full{grid-column:1/-1}
+@media (max-width:420px){.fields{grid-template-columns:1fr}}
+.field label{font-size:13px;font-weight:600;color:var(--muted)}
+.field input,.field textarea,.field select{background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-width:0}
+.field textarea{resize:vertical;min-height:72px}
+.field input[type=color]{padding:3px;height:44px;cursor:pointer}
+.hint{font-size:12px;color:var(--muted)}
+.slugrow{display:flex;align-items:center;background:var(--field);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.slugrow span{padding:0 0 0 12px;color:var(--muted);font-size:14px;white-space:nowrap}
+.slugrow input{border:0!important;background:transparent!important;padding-left:2px!important}
+.seg{display:flex;background:var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg label{position:relative;flex:1;text-align:center;padding:7px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+.seg input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;pointer-events:none}
+.seg label:has(input:checked){background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.seg label:has(input:focus-visible){outline:2px solid var(--accent)}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-top:8px}
+.check input{margin-top:3px;width:16px;height:16px;accent-color:var(--accent)}
+
+.sendrow{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.sendrow .field{flex:1 1 220px}
+.progress{height:10px;border-radius:999px;background:var(--line);overflow:hidden;margin:14px 0 6px}
+.progress i{display:block;height:100%;width:0;background:var(--accent);border-radius:inherit;transition:width .2s}
+.ptext{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.done{text-align:center;padding:12px 0}
+.done svg{width:56px;height:56px;color:var(--ok)}
+.done h2{margin:8px 0 6px;font-size:24px}
+.done p{margin:0 auto 16px;color:var(--muted);max-width:44ch}
+.done .pick{margin-top:6px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./">← Web Store</a>
+  <h1>Gửi app lên Web Store</h1>
+  <p class="lead">Kéo thư mục game hoặc tiện ích vào, điền vài thông tin và bấm gửi. Không cần tài khoản GitHub.</p>
+
+  <div id="setup" class="msg warn" hidden>Trang gửi app chưa được kết nối với server. Chủ Web Store cần điền địa chỉ server vào file <code>config.js</code>.</div>
+
+  <form id="form" novalidate>
+    <section class="card" id="s1">
+      <h2 class="step"><span class="num">1</span>Chọn app</h2>
+      <div class="drop" id="drop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/><path d="M12 10v6m-3-3 3-3 3 3"/></svg>
+        <b>Kéo thả thư mục app vào đây</b>
+        <small>Hoặc một file .html, hoặc file .zip. Thư mục phải có <code>index.html</code>.</small>
+        <div class="pick">
+          <button type="button" class="btn" id="pickDir">Chọn thư mục</button>
+          <button type="button" class="btn" id="pickFile">Chọn file .html / .zip</button>
+        </div>
+        <input type="file" id="dirInput" webkitdirectory multiple hidden>
+        <input type="file" id="fileInput" accept=".html,.htm,.zip,text/html,application/zip" hidden>
+      </div>
+      <div id="loaded" hidden></div>
+      <div id="loadMsg"></div>
+    </section>
+
+    <section class="card off" id="s2">
+      <h2 class="step"><span class="num">2</span>Thông tin app</h2>
+      <div class="info">
+        <div class="iconcol">
+          <div class="icon" id="iconPreview">?</div>
+          <button type="button" class="btn" id="pickIcon">Chọn biểu tượng</button>
+          <button type="button" class="btn link" id="clearIcon" hidden>Bỏ ảnh</button>
+          <small>Ảnh vuông, ví dụ 256×256. Không bắt buộc.</small>
+          <input type="file" id="iconInput" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden>
+        </div>
+        <div class="fields">
+          <div class="field full"><label for="title">Tên app *</label><input id="title" maxlength="80" required placeholder="Ví dụ: Cờ Caro"></div>
+          <div class="field full"><label>Loại</label>
+            <div class="seg" role="radiogroup" aria-label="Loại app">
+              <label><input type="radio" name="type" value="game" checked>Game</label>
+              <label><input type="radio" name="type" value="tool">Tiện ích</label>
+            </div></div>
+          <div class="field"><label for="category">Thể loại</label><input id="category" maxlength="40" list="cats" placeholder="Giải đố, Hành động…"></div>
+          <div class="field"><label for="author">Tác giả</label><input id="author" maxlength="60" placeholder="Tên của bạn"></div>
+          <div class="field full"><label for="description">Mô tả ngắn</label><textarea id="description" maxlength="500" placeholder="Một hai câu giới thiệu app."></textarea></div>
+          <div class="field"><label for="slug">Tên thư mục *</label>
+            <div class="slugrow"><span>apps/</span><input id="slug" maxlength="40" required pattern="[a-z0-9-]+" autocapitalize="off" spellcheck="false"></div>
+            <span class="hint">Chữ thường không dấu, số, gạch ngang.</span></div>
+          <div class="field"><label for="color">Màu biểu tượng</label><input type="color" id="color" value="#0a6cff"></div>
+        </div>
+      </div>
+      <datalist id="cats"></datalist>
+      <div id="slugMsg"></div>
+    </section>
+
+    <section class="card off" id="s3">
+      <h2 class="step"><span class="num">3</span>Gửi</h2>
+      <div class="sendrow">
+        <div class="field"><label for="code">Mã mời *</label><input id="code" required autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Mã do chủ Web Store đưa bạn"></div>
+        <button type="submit" class="btn primary" id="send">Gửi lên Web Store</button>
+      </div>
+      <div id="sendMsg"></div>
+      <div id="prog" hidden><div class="progress"><i id="bar"></i></div><div class="ptext" id="ptext"></div></div>
+    </section>
+  </form>
+
+  <section class="card" id="result" hidden></section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const API = (window.WEB_STORE?.api || "").replace(/\/+$/, "");
+const LIMIT = { file: 25 * 1024 * 1024, total: 100 * 1024 * 1024, count: 1000 };
+const SEGMENT_RE = /^[\p{L}\p{N}_\-][\p{L}\p{N}\p{M} ._()\-\[\]+@,~]*$/u;
+const JUNK = /(^|\/)(\.[^/]*|__MACOSX|node_modules|Thumbs\.db|desktop\.ini)(\/|$)/i;
+const store = { get(k){ try { return localStorage.getItem(k) || ""; } catch { return ""; } }, set(k, v){ try { localStorage.setItem(k, v); } catch {} } };
+
+let files = [];      // [{ path, file }]
+let iconFile = null; // ảnh biểu tượng chọn riêng
+let existing = [];   // app đang có trên Web Store
+let slugTouched = false;
+
+if (!API) $("#setup").hidden = false;
+$("#code").value = store.get("webstore.code");
+$("#author").value = store.get("webstore.author");
+
+fetch("apps.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : { apps: [] }).then(d => {
+  existing = d.apps || [];
+  $("#cats").innerHTML = [...new Set(existing.map(a => a.category).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join("");
+  checkSlug();
+}).catch(() => {});
+
+// ---------- tiện ích ----------
+const fmtSize = n => n < 1024 ? n + " B" : n < 1048576 ? (n / 1024).toFixed(0) + " KB" : (n / 1048576).toFixed(1) + " MB";
+const slugify = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[đĐ]/g, "d").toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40).replace(/-+$/, "");
+function hueHex(str){
+  let h = 0; for (const c of str) h = (h * 31 + c.charCodeAt(0)) % 360;
+  const s = .65, l = .5, k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l);
+  const f = n => Math.round(255 * (l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1))));
+  return "#" + [f(0), f(8), f(4)].map(x => x.toString(16).padStart(2, "0")).join("");
+}
+const initials = t => { const w = t.replace(/[^\p{L}\p{N} ]/gu, "").trim().split(/\s+/); return ((w[0]?.[0] || "?") + (w[1]?.[0] || "")).toUpperCase(); };
+const msg = (el, type, html) => { $(el).innerHTML = html ? `<div class="msg ${type}">${html}</div>` : ""; };
+const readText = f => f.text();
+const toBase64 = f => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.slice(r.result.indexOf(",") + 1)); r.onerror = () => rej(r.error); r.readAsDataURL(f); });
+
+// ---------- đọc thư mục / file ----------
+async function fromDrop(dt){
+  const entries = [...(dt.items || [])].map(i => i.webkitGetAsEntry?.()).filter(Boolean);
+  if (!entries.length) return [...dt.files].map(f => ({ path: f.name, file: f }));
+  const out = [];
+  async function walk(entry, prefix){
+    if (entry.isFile) {
+      out.push({ path: prefix + entry.name, file: await new Promise((res, rej) => entry.file(res, rej)) });
+    } else if (entry.isDirectory) {
+      const reader = entry.createReader(); let batch;
+      do { batch = await new Promise((res, rej) => reader.readEntries(res, rej)); for (const e of batch) await walk(e, prefix + entry.name + "/"); } while (batch.length);
+    }
+  }
+  for (const e of entries) await walk(e, "");
+  return out;
+}
+
+let jszip;
+async function unzip(file){
+  if (!jszip) await new Promise((res, rej) => {
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+    s.onload = () => { jszip = window.JSZip; res(); }; s.onerror = () => rej(new Error("Không tải được bộ giải nén."));
+    document.head.append(s);
+  });
+  const zip = await jszip.loadAsync(file), out = [];
+  for (const z of Object.values(zip.files)) {
+    if (z.dir) continue;
+    const blob = await z.async("blob");
+    out.push({ path: z.name, file: new File([blob], z.name.split("/").pop()) });
+  }
+  return out;
+}
+
+async function load(list, sourceName){
+  msg("#loadMsg"); files = [];
+  try {
+    if (list.length === 1 && /\.zip$/i.test(list[0].path)) { sourceName = list[0].path.replace(/\.zip$/i, ""); list = await unzip(list[0].file); }
+    list = list.map(x => ({ ...x, path: x.path.normalize("NFC").replace(/\\/g, "/").replace(/^\/+/, "") })).filter(x => x.path && !JUNK.test(x.path));
+
+    // Bỏ thư mục bọc ngoài cùng (ví dụ "co-caro/index.html" → "index.html")
+    while (list.length && list.every(x => x.path.includes("/")) && new Set(list.map(x => x.path.split("/")[0])).size === 1) {
+      sourceName = list[0].path.split("/")[0];
+      list = list.map(x => ({ ...x, path: x.path.slice(x.path.indexOf("/") + 1) }));
+    }
+    if (!list.length) throw new Error("Không tìm thấy file nào.");
+
+    // App chỉ có 1 file .html ở gốc → đổi tên thành index.html
+    if (!list.some(x => x.path === "index.html")) {
+      const roots = list.filter(x => !x.path.includes("/") && /\.html?$/i.test(x.path));
+      if (roots.length === 1) { sourceName ||= roots[0].path.replace(/\.html?$/i, ""); roots[0].path = "index.html"; }
+      else if (list.some(x => /(^|\/)index\.html$/i.test(x.path)))
+        throw new Error("Có index.html nhưng không nằm ở thư mục gốc. Hãy chọn đúng thư mục chứa index.html.");
+      else throw new Error(roots.length ? "Có nhiều file .html ở thư mục gốc. Hãy đổi tên file mở đầu thành index.html." : "Không tìm thấy file index.html.");
+    }
+
+    const bad = list.filter(x => x.path.split("/").some(s => !SEGMENT_RE.test(s)));
+    if (bad.length) throw new Error("Tên file có ký tự không hỗ trợ: " + bad.slice(0, 3).map(x => esc(x.path)).join(", "));
+    const big = list.filter(x => x.file.size > LIMIT.file);
+    if (big.length) throw new Error("File vượt quá 25 MB: " + big.slice(0, 3).map(x => esc(x.path)).join(", "));
+    const total = list.reduce((s, x) => s + x.file.size, 0);
+    if (total > LIMIT.total) throw new Error(`Tổng dung lượng ${fmtSize(total)} vượt quá 100 MB.`);
+    if (list.length > LIMIT.count) throw new Error(`Quá nhiều file (${list.length}, tối đa ${LIMIT.count}).`);
+
+    files = list.sort((a, b) => a.path.localeCompare(b.path));
+    await afterLoad(sourceName || "");
+  } catch (e) {
+    showLoaded(); msg("#loadMsg", "err", e.message || String(e)); setEnabled(false);
+  }
+}
+
+async function afterLoad(sourceName){
+  const html = await readText(files.find(x => x.path === "index.html").file);
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const title = doc.title.trim() || sourceName;
+  const desc = doc.querySelector('meta[name="description"]')?.content?.trim() || "";
+  $("#title").value = title.slice(0, 80);
+  $("#description").value = desc.slice(0, 500);
+  slugTouched = false;
+  $("#slug").value = slugify(sourceName) || slugify(title) || "app-moi";
+  $("#color").value = hueHex($("#slug").value);
+  iconFile = null;
+
+  // Cảnh báo đường dẫn tuyệt đối (/css/a.css) — sẽ lỗi trên GitHub Pages
+  const warn = [];
+  for (const x of files.filter(x => /\.(html?|css|js|mjs)$/i.test(x.path) && x.file.size < 3e6)) {
+    const t = await readText(x.file);
+    if (/(?:src|href|action)\s*=\s*["']\/(?!\/)|url\(\s*["']?\/(?!\/)|(?:import|from)\s*["']\/(?!\/)/i.test(t)) warn.push(x.path);
+  }
+  showLoaded();
+  if (warn.length) msg("#loadMsg", "warn", `Các file sau có đường dẫn bắt đầu bằng <code>/</code>, app có thể bị lỗi trên Web Store. Hãy đổi thành đường dẫn tương đối (ví dụ <code>css/style.css</code>):<ul>${warn.slice(0, 5).map(p => `<li><code>${esc(p)}</code></li>`).join("")}</ul>`);
+  setEnabled(true); updatePreview(); checkSlug();
+}
+
+function showLoaded(){
+  const el = $("#loaded");
+  if (!files.length) { el.hidden = true; $("#drop").hidden = false; return; }
+  const total = files.reduce((s, x) => s + x.file.size, 0);
+  el.hidden = false; $("#drop").hidden = true;
+  el.innerHTML = `<div class="loaded"><div class="what"><b>✓ Đã chọn ${files.length} file</b><span>${fmtSize(total)} · có index.html</span></div>
+    <button type="button" class="btn" id="again">Chọn lại</button></div>
+    <details class="files"><summary>Xem danh sách file</summary><ul>${files.slice(0, 300).map(x => `<li>${esc(x.path)} · ${fmtSize(x.file.size)}</li>`).join("")}${files.length > 300 ? "<li>…</li>" : ""}</ul></details>`;
+  $("#again").onclick = reset;
+}
+
+function setEnabled(on){ $("#s2").classList.toggle("off", !on); $("#s3").classList.toggle("off", !on); }
+function reset(){ files = []; iconFile = null; showLoaded(); msg("#loadMsg"); msg("#slugMsg"); msg("#sendMsg"); setEnabled(false); $("#dirInput").value = $("#fileInput").value = ""; }
+
+// ---------- biểu tượng ----------
+let previewUrl;
+function updatePreview(){
+  const el = $("#iconPreview"), color = $("#color").value;
+  const img = iconFile || files.find(x => /^icon\.(png|jpe?g|webp|svg)$/i.test(x.path))?.file;
+  if (previewUrl) URL.revokeObjectURL(previewUrl), previewUrl = null;
+  el.style.background = `linear-gradient(140deg,${color},color-mix(in srgb,${color} 60%,#000))`;
+  if (img) { previewUrl = URL.createObjectURL(img); el.innerHTML = `<img src="${previewUrl}" alt="">`; }
+  else el.textContent = initials($("#title").value || "?");
+  $("#clearIcon").hidden = !iconFile;
+}
+$("#pickIcon").onclick = () => $("#iconInput").click();
+$("#iconInput").onchange = e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  if (f.size > 2 * 1024 * 1024) return msg("#slugMsg", "err", "Ảnh biểu tượng nên nhỏ hơn 2 MB.");
+  iconFile = f; updatePreview();
+};
+$("#clearIcon").onclick = () => { iconFile = null; updatePreview(); };
+$("#title").addEventListener("input", () => { if (!slugTouched) $("#slug").value = slugify($("#title").value) || "app-moi"; updatePreview(); checkSlug(); });
+$("#color").addEventListener("input", updatePreview);
+$("#slug").addEventListener("input", e => { slugTouched = true; e.target.value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-{2,}/g, "-"); checkSlug(); });
+
+function checkSlug(){
+  const s = $("#slug").value, hit = existing.find(a => a.id === s);
+  if (!files.length) return;
+  if (!/^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/.test(s)) return msg("#slugMsg", "err", "Tên thư mục chỉ gồm chữ thường không dấu, số và dấu gạch ngang, không bắt đầu hay kết thúc bằng gạch ngang.");
+  if (hit) return msg("#slugMsg", "info", `Web Store đã có app <b>${esc(hit.title)}</b> trong thư mục này.
+    <label class="check"><input type="checkbox" id="update"> Đây là bản cập nhật của app đó (bản cũ sẽ được thay thế)</label>`);
+  msg("#slugMsg");
+}
+
+// ---------- chọn file ----------
+$("#pickDir").onclick = () => $("#dirInput").click();
+$("#pickFile").onclick = () => $("#fileInput").click();
+$("#dirInput").onchange = e => load([...e.target.files].map(f => ({ path: f.webkitRelativePath || f.name, file: f })));
+$("#fileInput").onchange = e => load([...e.target.files].map(f => ({ path: f.name, file: f })));
+const drop = $("#drop");
+["dragenter", "dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", async e => load(await fromDrop(e.dataTransfer)));
+addEventListener("dragover", e => e.preventDefault());
+addEventListener("drop", e => e.preventDefault());
+
+// ---------- gửi ----------
+async function api(path, body, raw){
+  let r;
+  try {
+    r = await fetch(API + path, { method: "POST", headers: { "content-type": "application/json", "x-invite-code": $("#code").value.trim() }, body: raw ? body : JSON.stringify(body) });
+  } catch { throw new Error("Không kết nối được tới server. Kiểm tra mạng và thử lại."); }
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || `Server trả lỗi ${r.status}.`);
+  return d;
+}
+
+function progress(done, total, text){
+  $("#prog").hidden = false;
+  $("#bar").style.width = Math.round(100 * done / Math.max(total, 1)) + "%";
+  $("#ptext").textContent = text;
+}
+
+$("#form").addEventListener("submit", async e => {
+  e.preventDefault();
+  msg("#sendMsg");
+  if (!API) return msg("#sendMsg", "err", "Trang chưa được kết nối với server (thiếu địa chỉ trong config.js).");
+  if (!files.length) return msg("#sendMsg", "err", "Hãy chọn app ở bước 1.");
+  const title = $("#title").value.trim(), slug = $("#slug").value, code = $("#code").value.trim();
+  if (!title) { $("#title").focus(); return msg("#sendMsg", "err", "Hãy nhập tên app."); }
+  if (!/^[a-z0-9](?:[a-z0-9-]{0,38}[a-z0-9])?$/.test(slug)) { $("#slug").focus(); return msg("#sendMsg", "err", "Tên thư mục chưa hợp lệ."); }
+  const hit = existing.find(a => a.id === slug);
+  if (hit && !$("#update")?.checked) return msg("#sendMsg", "err", `Đã có app “${esc(hit.title)}” trong thư mục này. Đổi tên thư mục, hoặc đánh dấu “bản cập nhật” ở bước 2.`);
+  if (!code) { $("#code").focus(); return msg("#sendMsg", "err", "Hãy nhập mã mời."); }
+
+  // Danh sách file cuối cùng: ảnh biểu tượng chọn riêng sẽ thay icon.* cũ
+  let list = files.filter(x => x.path !== "app.json");
+  if (iconFile) {
+    const ext = (iconFile.name.match(/\.(png|jpe?g|webp|svg)$/i)?.[1] || "png").toLowerCase().replace("jpeg", "jpg");
+    list = list.filter(x => !/^icon\.(png|jpe?g|webp|svg)$/i.test(x.path)).concat({ path: "icon." + ext, file: iconFile });
+  }
+
+  const btn = $("#send"); btn.disabled = true; btn.textContent = "Đang gửi…";
+  try {
+    progress(0, 1, "Đang kiểm tra mã mời…");
+    const who = await api("/check", {});
+    store.set("webstore.code", code); store.set("webstore.author", $("#author").value.trim());
+
+    const total = list.reduce((s, x) => s + x.file.size, 0) || 1;
+    let sent = 0, i = 0;
+    const shas = new Array(list.length);
+    async function worker(){
+      while (i < list.length) {
+        const k = i++, x = list[k];
+        const b64 = await toBase64(x.file);
+        let d, tries = 0;
+        for (;;) {
+          try { d = await api("/blob", `{"content":"${b64}","encoding":"base64"}`, true); break; }
+          catch (err) { if (++tries >= 3 || /Mã mời|quá lớn/.test(err.message)) throw err; await new Promise(r => setTimeout(r, 800 * tries)); }
+        }
+        shas[k] = d.sha; sent += x.file.size;
+        progress(sent, total, `Đang tải lên ${shas.filter(Boolean).length}/${list.length} file · ${fmtSize(sent)} / ${fmtSize(total)}`);
+      }
+    }
+    await Promise.all([worker(), worker(), worker()]);
+
+    progress(1, 1, "Đang tạo bản gửi…");
+    const res = await api("/submit", {
+      app: { slug, title, type: document.querySelector('input[name="type"]:checked').value,
+        category: $("#category").value.trim(), description: $("#description").value.trim(),
+        author: $("#author").value.trim(), color: $("#color").value },
+      files: list.map((x, k) => ({ path: x.path, sha: shas[k] })),
+      update: !!hit,
+    });
+    showResult(res, title, who.name);
+  } catch (err) {
+    $("#prog").hidden = true;
+    msg("#sendMsg", "err", esc(err.message || String(err)));
+  } finally { btn.disabled = false; btn.textContent = "Gửi lên Web Store"; }
+});
+
+function showResult(res, title, name){
+  $("#form").hidden = true;
+  const el = $("#result"); el.hidden = false;
+  const direct = res.mode === "direct";
+  el.innerHTML = `<div class="done">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>
+    <h2>${direct ? "Đã đăng" : "Đã gửi"} “${esc(title)}”${name ? `, cảm ơn ${esc(name)}!` : "!"}</h2>
+    <p>${direct ? "App sẽ xuất hiện trên Web Store sau khoảng 1–2 phút." : "Chủ Web Store sẽ xem qua và duyệt. Sau khi được duyệt, app tự lên kệ trong 1–2 phút."}</p>
+    <div class="pick">
+      ${direct ? `<a class="btn primary" href="./#/app/${esc(res.slug)}">Xem trên Web Store</a>` : `<a class="btn primary" href="./">Về Web Store</a>`}
+      <button type="button" class="btn" id="another">Gửi app khác</button>
+    </div></div>`;
+  $("#another").onclick = () => { el.hidden = true; $("#form").hidden = false; $("#prog").hidden = true; reset(); scrollTo(0, 0); };
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+</script>
+</body>
+</html>

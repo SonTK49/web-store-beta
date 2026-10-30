@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lật Thẻ Trí Nhớ</title>
+<style>
+html,body{margin:0;min-height:100%;background:#fdf6e9;color:#2b2118;font-family:system-ui,sans-serif}
+body{display:flex;flex-direction:column;align-items:center;gap:14px;padding:20px 12px}
+h1{margin:0;font-size:22px}
+.info{display:flex;gap:18px;font-variant-numeric:tabular-nums}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:min(92vw,420px)}
+.c{aspect-ratio:1;border:0;border-radius:12px;font-size:min(9vw,40px);background:#3a6ea5;color:transparent;cursor:pointer;transition:transform .2s,background .2s}
+.c.o,.c.m{background:#fff;color:#2b2118;transform:rotateY(180deg)}
+.c.m{background:#cdeccf}
+button.r{border:0;background:#2b2118;color:#fdf6e9;padding:10px 18px;border-radius:999px;font-size:15px}
+</style></head><body>
+<h1>Lật Thẻ Trí Nhớ</h1>
+<div class="info"><span>Lượt: <b id="t">0</b></span><span>Cặp: <b id="p">0</b>/8</span></div>
+<div class="g" id="g"></div>
+<button class="r" id="r">Chơi lại</button>
+<script>
+const E=['🍜','🥭','🛵','🏮','🐉','🌾','☕','🎋'];let a=[],o=[],t=0,p=0,lock=false;
+function start(){const g=document.getElementById('g');g.innerHTML='';t=0;p=0;o=[];upd();
+const d=[...E,...E].sort(()=>Math.random()-.5);d.forEach(e=>{const b=document.createElement('button');b.className='c';b.textContent=e;b.onclick=()=>flip(b);g.appendChild(b)})}
+function upd(){document.getElementById('t').textContent=t;document.getElementById('p').textContent=p}
+function flip(b){if(lock||b.classList.contains('o')||b.classList.contains('m'))return;b.classList.add('o');o.push(b);
+if(o.length==2){t++;upd();if(o[0].textContent==o[1].textContent){o.forEach(x=>{x.classList.remove('o');x.classList.add('m')});o=[];p++;upd();if(p==8)setTimeout(()=>document.querySelector('h1').textContent='Hoàn thành sau '+t+' lượt!',300)}
+else{lock=true;setTimeout(()=>{o.forEach(x=>x.classList.remove('o'));o=[];lock=false},700)}}}
+document.getElementById('r').onclick=()=>{document.querySelector('h1').textContent='Lật Thẻ Trí Nhớ';start()};start();
+</script></body></html>
