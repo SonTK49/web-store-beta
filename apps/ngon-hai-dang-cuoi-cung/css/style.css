@@ -1,0 +1,31 @@
+:root{
+  --night:#08111f; --ink:#f3ead6; --muted:#a9b4c4; --gold:#ffc861; --gold-deep:#e09b2d; --red:#ff7d6b;
+  --font:Georgia,"Times New Roman",serif; --ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--night);color:var(--ink);overflow:hidden;font-family:var(--ui)}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+
+.hud{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;gap:16px;padding:12px max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left));padding-top:max(12px,env(safe-area-inset-top));font-size:15px;pointer-events:none;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.hud[hidden]{display:none}
+.hud .night{font-family:var(--font);font-style:italic;color:var(--gold);font-size:18px}
+.hud .saved{margin-left:auto;font-variant-numeric:tabular-nums}
+.hud .saved b{color:var(--gold)}
+.lives{display:flex;gap:5px}
+.lives i{width:12px;height:12px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.lives i.off{background:#3a4253;box-shadow:none}
+
+.screen{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% 85%,rgba(255,200,97,.12),transparent 60%),rgba(5,10,20,.72);backdrop-filter:blur(3px)}
+.screen[hidden]{display:none}
+.card{max-width:520px;width:100%;text-align:center;animation:rise .5s ease both}
+.eyebrow{margin:0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:var(--font);font-weight:normal;font-size:clamp(30px,7vw,46px);line-height:1.15;margin:10px 0 18px;text-wrap:balance}
+.story{font-family:var(--font);font-size:clamp(16px,2.6vw,18px);line-height:1.75;color:#d9d2c2;text-align:left}
+.story p{margin:0 0 12px}
+.story em{color:var(--gold);font-style:normal}
+button{margin-top:18px;font:600 16px var(--ui);color:#1d1406;background:linear-gradient(var(--gold),var(--gold-deep));border:0;border-radius:999px;padding:13px 30px;cursor:pointer;box-shadow:0 6px 24px rgba(255,190,80,.25)}
+button:hover{filter:brightness(1.06)}
+button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.hint{margin:14px 0 0;font-size:13px;color:var(--muted)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.card{animation:none}}

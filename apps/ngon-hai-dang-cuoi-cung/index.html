@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ngọn Hải Đăng Cuối Cùng</title>
+<meta name="description" content="Ba đêm bão trên đảo Hòn Gió. Rọi đèn hải đăng dẫn thuyền đánh cá về bến an toàn trước khi chúng đâm vào đá ngầm.">
+<link rel="icon" href="icon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="sea" aria-label="Biển đêm và ngọn hải đăng"></canvas>
+
+<div class="hud" id="hud" hidden>
+  <div class="night" id="hudNight">Đêm 1</div>
+  <div class="saved">⛵ <b id="hudSaved">0</b>/<span id="hudGoal">6</span></div>
+  <div class="lives" id="hudLives" aria-label="Số thuyền được phép mất"></div>
+</div>
+
+<div class="screen" id="screen">
+  <div class="card">
+    <p class="eyebrow" id="sEyebrow"></p>
+    <h1 id="sTitle"></h1>
+    <div class="story" id="sText"></div>
+    <button id="sBtn" type="button"></button>
+    <p class="hint" id="sHint"></p>
+  </div>
+</div>
+
+<script src="js/story.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
