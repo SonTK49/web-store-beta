@@ -268,6 +268,60 @@ html[data-graphics="modern"] #bOrientation:hover{background:linear-gradient(145d
 
 #bRetry{font-family:inherit;font-weight:800;font-size:calc(var(--u)*13);line-height:1.1;letter-spacing:normal;text-shadow:none}
 #bRetry .retry-icon{width:calc(var(--u)*9);height:calc(var(--u)*11);flex:none}
+
+/* ===== Nút hộp quà (Blindbox) trên màn hình chính ===== */
+.topbar .tl{display:flex;align-items:center;gap:calc(var(--u)*6)}
+.topbar .giftwrap{position:relative;display:flex;flex-direction:column;align-items:center}
+#bGift{position:relative}
+#bGift svg{width:calc(var(--u)*14);height:calc(var(--u)*14)}
+#bGift .gdot{position:absolute;top:calc(var(--u)*-3);right:calc(var(--u)*-3);width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:50%;background:#ff3b3b;border:calc(var(--u)*1.5) solid #fff;display:none;box-shadow:0 0 0 calc(var(--u)*.5) #8a1a1a}
+#bGift.ready .gdot{display:block}
+#bGift.ready{animation:giftWiggle 2.4s ease-in-out infinite}
+@keyframes giftWiggle{0%,62%,100%{transform:rotate(0)}66%{transform:rotate(-9deg)}72%{transform:rotate(8deg)}78%{transform:rotate(-6deg)}84%{transform:rotate(4deg)}90%{transform:rotate(0)}}
+.gtimer{position:absolute;top:calc(100% + var(--u)*3);left:50%;transform:translateX(-50%);white-space:nowrap;font-weight:800;font-size:calc(var(--u)*9);color:#fff;text-shadow:0 calc(var(--u)*1) 0 var(--ink),0 0 calc(var(--u)*2) var(--ink);font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){#bGift.ready{animation:none}}
+/* ===== Màn hình Blindbox ===== */
+#boxScr{position:absolute;inset:0;z-index:25;display:none;overflow:hidden;background:#f4ecdc;pointer-events:auto;touch-action:manipulation}
+#boxScr.show{display:block}
+#boxBg,#boxStrip,#boxFx{position:absolute;left:0;display:block}
+#boxBg{top:0;width:100%;height:100%}
+#boxClose{position:absolute;right:calc(var(--u)*8);top:calc(var(--st) + var(--u)*8);z-index:3}
+#boxCoin{position:absolute;left:calc(var(--u)*8);top:calc(var(--st) + var(--u)*11);z-index:3}
+#boxBtns{position:absolute;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*10);z-index:2}
+#boxBtns .btn{min-width:calc(var(--u)*118);justify-content:center;font-size:calc(var(--u)*12);padding:calc(var(--u)*7) calc(var(--u)*10) calc(var(--u)*6)}
+#boxBtns .btn.one{min-width:calc(var(--u)*170);font-size:calc(var(--u)*14)}
+#boxBtns .btn:disabled{opacity:.6;cursor:default}
+#boxHint{position:absolute;left:0;right:0;text-align:center;font-weight:800;font-size:calc(var(--u)*9.5);color:#6b5240;z-index:2;padding:0 calc(var(--u)*12)}
+#boxWin{position:absolute;inset:0;z-index:5;display:none;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*10);background:radial-gradient(circle at 50% 42%,#4a3170 0%,#22163b 55%,#0e0a1a 100%)}
+#boxWin.show{display:flex}
+#boxFx{top:0;width:100%;height:100%;pointer-events:none}
+#boxWinCard{position:relative;z-index:1;width:calc(var(--u)*170);max-width:74%;height:auto}
+#boxWin.show #boxWinCardWrap{animation:boxPop .75s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes boxPop{0%{transform:scale(.25) rotate(-12deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(0)}}
+#boxWinTag{position:relative;z-index:1;font-weight:800;font-size:calc(var(--u)*19);color:#fff;text-align:center;padding:0 calc(var(--u)*10);text-shadow:0 calc(var(--u)*2) 0 #2f6fd0,0 calc(var(--u)*-1) 0 #2f6fd0,calc(var(--u)*1.5) 0 0 #2f6fd0,calc(var(--u)*-1.5) 0 0 #2f6fd0,0 0 calc(var(--u)*10) #9fd0ff}
+#boxWinName{position:relative;z-index:1;font-weight:800;font-size:calc(var(--u)*22);color:#fff;text-align:center;text-shadow:0 calc(var(--u)*2) 0 #2a1a3a,0 0 calc(var(--u)*10) #b58cff}
+#boxDup{position:relative;z-index:1;display:none;align-items:center;gap:calc(var(--u)*6);max-width:86%;background:#fff8e6;color:#4a3426;border:calc(var(--u)*2) solid #3b2a35;border-radius:calc(var(--u)*10);padding:calc(var(--u)*7) calc(var(--u)*11);font-weight:800;font-size:calc(var(--u)*11);text-align:left;box-shadow:0 calc(var(--u)*3) 0 #3b2a35}
+#boxDup.show{display:flex;animation:boxPop .5s ease both}
+#boxBack{position:relative;z-index:1}
+#boxWin.show #boxBack{animation:boxFadeUp .4s .6s both}
+@keyframes boxFadeUp{0%{opacity:0;transform:translateY(calc(var(--u)*8))}100%{opacity:1;transform:none}}
+.card canvas.silhouette{cursor:default}
+#modal[data-kind="shop"] #mCoinBox{height:calc(var(--u)*24);box-sizing:border-box;padding-top:0;padding-bottom:0}
+#modal[data-kind="shop"] #mClose{width:calc(var(--u)*24);height:calc(var(--u)*24);min-width:0;border-radius:50%!important;padding:0;font-size:calc(var(--u)*11);box-sizing:border-box;clip-path:none}
+.xicon{width:46%;height:46%;display:block;flex:none;margin:0}
+#mClose,#boxClose{display:inline-flex;align-items:center;justify-content:center;padding:0;line-height:1}
+/* Kiểu Mềm mại: chữ nâu trên nền kem, bỏ bóng chữ đậm để các nét không dính vào nhau */
+#stage[data-graphics="soft"] #boxBtns .btn{text-shadow:none;letter-spacing:.015em;font-weight:700}
+#stage[data-graphics="soft"] #boxBtns .btn.org{color:#5a3a24;background:linear-gradient(#ffe0a8,#f6b866)}
+#boxWinCardWrap{position:relative;z-index:1;display:flex;justify-content:center;max-width:100%}
+#boxWinCardWrap #boxWinCard{max-width:100%}
+#boxWinRays{position:absolute;left:50%;top:50%;width:190%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;display:none;
+  background:radial-gradient(closest-side,rgba(255,236,150,.85),rgba(255,214,90,.35) 45%,rgba(255,214,90,0) 75%),repeating-conic-gradient(from 0deg,rgba(255,232,140,.42) 0deg 9deg,rgba(255,232,140,0) 9deg 22deg);
+  -webkit-mask:radial-gradient(closest-side,#000 30%,transparent 100%);mask:radial-gradient(closest-side,#000 30%,transparent 100%);animation:boxRays 14s linear infinite, boxRaysPulse 1.6s ease-in-out infinite}
+#boxWin.rare #boxWinRays{display:block}
+@keyframes boxRays{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes boxRaysPulse{0%,100%{opacity:.65}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){#boxWinRays{animation:none}}
 </style>
 </head>
 <body>
@@ -278,7 +332,7 @@ html[data-graphics="modern"] #bOrientation:hover{background:linear-gradient(145d
   <!-- MÀN HÌNH CHÍNH -->
   <div id="sTitle" class="screen">
     <div class="topbar">
-      <div class="coinbox"><i class="coin"></i><span id="coinTxt">0</span></div>
+      <div class="row tl"><div class="coinbox"><i class="coin"></i><span id="coinTxt">0</span></div><div class="giftwrap"><button class="btn ic" id="bGift" aria-label="Blindbox" title="Blindbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11.5" rx="1.5"/><path d="M2.5 9h19v-3h-19z"/><path d="M12 6v14.5"/><path d="M12 6c-1.5-3-5.5-3.5-5.5-1 0 1.5 2.5 1.6 5.5 1zM12 6c1.5-3 5.5-3.5 5.5-1 0 1.5-2.5 1.6-5.5 1z"/></svg><i class="gdot"></i></button><span class="gtimer" id="giftTimer">00:00</span></div></div>
       <div class="row"><button class="btn langbtn" id="bLang" title="Ngôn ngữ / Language"></button><button class="btn ic" id="bSound" title="Âm thanh">🔊</button><button class="btn ic" id="bVibe" title="Rung">📳</button><button class="btn ic" id="bGraphics" title="Thiết lập đồ họa" aria-label="Thiết lập đồ họa">⚙</button></div>
     </div>
     <div id="titleLogo" class="col" style="top:calc(var(--st) + var(--u)*(var(--gy)*0.09 + 16))"><div class="logo out" id="logo"></div></div>
@@ -336,6 +390,15 @@ html[data-graphics="modern"] #bOrientation:hover{background:linear-gradient(145d
     </div>
   </div>
 
+  <div id="boxScr" aria-label="Blindbox">
+    <canvas id="boxBg"></canvas>
+    <div class="coinbox" id="boxCoin"><i class="coin"></i><span id="boxCoinTxt">0</span></div>
+    <button class="btn ic" id="boxClose" aria-label="Đóng"><svg class="xicon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></svg></button>
+    <canvas id="boxStrip"></canvas>
+    <div id="boxBtns"></div>
+    <div id="boxHint"></div>
+    <div id="boxWin"><canvas id="boxFx"></canvas><div id="boxWinTag"></div><div id="boxWinCardWrap"><div id="boxWinRays"></div><canvas id="boxWinCard"></canvas></div><div id="boxWinName"></div><div id="boxDup"><i class="coin"></i><span id="boxDupTxt"></span></div><button class="btn org" id="boxBack">Quay lại</button></div>
+  </div>
   <div id="modal" class="modal"><div class="mbox"><div class="mhead"><span id="mTitle"></span><div class="row"><div class="coinbox" id="mCoinBox"><i class="coin"></i><span id="mCoin">0</span></div><button class="btn ic" id="mClose">✕</button></div></div><div class="mtabs" id="mTabs"></div><div class="mtabs species-tabs" id="mSubTabs" role="group" aria-label="Nhóm loài" hidden></div><div class="mbody" id="mBody"></div></div></div>
   <div id="toasts"></div>
   <div id="fade"></div>
@@ -380,7 +443,7 @@ function defSave(){return{coins:0,name:'',mode:'classic',
   best:{classic:0,hard:0,moving:0,items:0},
   board:{classic:[],hard:[],moving:[],items:[]},
   stats:{games:0,pipes:0,coinsEarned:0,flaps:0,time:0,items:0,shields:0},
-  ach:{},daily:null,settings:{sound:true,vibe:true,ghost:false,lang:'vi',graphics:'classic',pixel:'low',customColor:'#43a9e8'}};}
+  box:{next:0,v:0},ach:{},daily:null,settings:{sound:true,vibe:true,ghost:false,lang:'vi',graphics:'classic',pixel:'low',customColor:'#43a9e8'}};}
 let save=defSave();
 function merge(d,s){if(!s||typeof s!=='object')return d;for(const k in s){const v=s[k];if(d[k]&&typeof d[k]==='object'&&!Array.isArray(d[k])&&v&&typeof v==='object'&&!Array.isArray(v))merge(d[k],v);else d[k]=v;}return d;}
 // Chỉ lưu tiến độ và lựa chọn; không lưu hình, âm thanh hay cache đồ họa.
@@ -393,12 +456,12 @@ const safeNum=n=>Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.round(Number(n
 function packSave(){return{v:2,c:safeNum(save.coins),n:String(save.name||'').slice(0,14),m:save.mode,
   o:SAVE_CATS.map(k=>[...new Set(save.owned[k])]),e:SAVE_CATS.map(k=>save.equip[k]),b:SAVE_MODES.map(k=>safeNum(save.best[k])),
   l:SAVE_MODES.map(k=>(save.board[k]||[]).slice(0,10).map(e=>[String(e.n||'').slice(0,14),safeNum(e.s),e.d,safeNum(e.id)])),
-  s:SAVE_STATS.map(k=>safeNum(save.stats[k])),a:save.ach,d:save.daily,
+  s:SAVE_STATS.map(k=>safeNum(save.stats[k])),a:save.ach,d:save.daily,x:[safeNum(save.box&&save.box.next),(save.box&&save.box.v)|0],
   t:[+!!save.settings.sound,+!!save.settings.vibe,+!!save.settings.ghost,save.settings.lang,save.settings.graphics,save.settings.pixel||'low',save.settings.customColor||'#43a9e8'],g:{}};}
 function unpackSave(p){const s=defSave();s.coins=p.c||0;s.name=p.n||'';s.mode=p.m||'classic';
   SAVE_CATS.forEach((k,i)=>{if(Array.isArray(p.o?.[i]))s.owned[k]=p.o[i];if(p.e?.[i])s.equip[k]=p.e[i];});
   SAVE_MODES.forEach((k,i)=>{s.best[k]=p.b?.[i]||0;s.board[k]=(p.l?.[i]||[]).map(e=>({n:e[0],s:e[1],d:e[2],id:e[3]}));});
-  SAVE_STATS.forEach((k,i)=>s.stats[k]=p.s?.[i]||0);s.ach=p.a||{};s.daily=p.d||null;
+  SAVE_STATS.forEach((k,i)=>s.stats[k]=p.s?.[i]||0);s.ach=p.a||{};s.daily=p.d||null;s.box={next:+(p.x?.[0])||0,v:(p.x?.[1])|0};
   if(p.t){s.settings={sound:!!p.t[0],vibe:!!p.t[1],ghost:!!p.t[2],lang:p.t[3]||'vi',graphics:p.t[4]||'classic',pixel:p.t[5]||'low',customColor:/^#[0-9a-f]{6}$/i.test(p.t[6]||'')?p.t[6]:'#43a9e8'};}
   return s;}
 const G64='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
@@ -423,6 +486,10 @@ function load(){try{const raw=localStorage.getItem(SKEY),p=raw?JSON.parse(raw):n
   delete save.owned.trail;delete save.equip.trail;
   save.owned.bg=save.owned.bg.filter(id=>id!=='goldenRice'&&id!=='apartments');
   if(save.equip.bg==='goldenRice'||save.equip.bg==='apartments')save.equip.bg='city';
+  // Bản Blindbox: reset loài một lần (giữ nguyên xu, mọi món khác giữ nguyên); có sẵn 1 lượt mở miễn phí.
+  if(!save.box||typeof save.box!=='object')save.box={next:0,v:0};
+  if((save.box.v|0)<1){save.owned.species=['random','classic','chick','penguin'];if(!save.owned.species.includes(save.equip.species))save.equip.species='classic';save.box={next:0,v:1};}
+  save.owned.species=save.owned.species.filter(id=>id==='random'||SPECIES[id]);if(save.equip.species!=='random'&&!save.owned.species.includes(save.equip.species))save.equip.species='classic';
  }catch(e){save=defSave();}}
 function persist(){try{const p=packSave(),keys=SAVE_MODES.filter(m=>ghostMem[m]?.y?.length>1);
   let json=JSON.stringify(p);
@@ -483,7 +550,7 @@ const isEN=()=>save.settings.lang==='en';
 function tr(s){return isEN()&&EN[s]!==undefined?EN[s]:s;}
 const L=(vi,en)=>isEN()?en:vi;
 const GAME_NAME=()=>L('Đôi Cánh Nghị Lực','Wings of Will');
-Object.assign(EN,{'Né chướng ngại vật nhặt các đồng xu trên đường':'Dodge obstacles and grab the coins along the way','Màu sắc':'Colors','Tất cả':'All','Chim':'Birds','Côn trùng':'Insects','Loài khác':'Others','Ong mật':'Honeybee','Bọ rùa':'Ladybug','Ve sầu':'Cicada','Châu chấu':'Grasshopper','Đom đóm':'Firefly','Dơi':'Bat','Cá chuồn':'Flying fish','Tết Nguyên đán':'Lunar New Year (Tết)','Cánh đồng lúa vàng':'Golden Rice Fields','Chung cư hiện đại':'Modern Apartments'});
+Object.assign(EN,{'Chào mào':'Bulbul','Chim sáo':'Myna','Vành khuyên':'White-eye','Diệc xám':'Grey Heron','Chim trĩ':'Pheasant','Hồng hoàng':'Hornbill','Cánh cụt hoàng đế':'Emperor Penguin','Cánh cụt nhảy dù':'Parachute Penguin','Hải âu lớn':'Albatross','Cu gáy':'Spotted Dove','Muỗi':'Mosquito','Ruồi':'Fly','Bọ ngựa':'Mantis','Chuồn chuồn kim':'Damselfly','Bướm phượng':'Swallowtail','Cá đuối bay':'Flying Manta','Rồng con':'Baby Dragon','Kỳ lân có cánh':'Winged Unicorn','Heo bay':'Flying Pig','Thằn lằn bay':'Flying Lizard','Khủng long bay':'Pterosaur','Diều giấy':'Paper Kite','Né chướng ngại vật nhặt các đồng xu trên đường':'Dodge obstacles and grab the coins along the way','Màu sắc':'Colors','Tất cả':'All','Chim':'Birds','Côn trùng':'Insects','Loài khác':'Others','Ong mật':'Honeybee','Bọ rùa':'Ladybug','Ve sầu':'Cicada','Châu chấu':'Grasshopper','Đom đóm':'Firefly','Dơi':'Bat','Cá chuồn':'Flying fish','Tết Nguyên đán':'Lunar New Year (Tết)','Cánh đồng lúa vàng':'Golden Rice Fields','Chung cư hiện đại':'Modern Apartments'});
 let flagUid=0;
 function starPts(cx,cy,R,r){const p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r:R;p.push((cx+Math.cos(a)*rr).toFixed(2)+','+(cy+Math.sin(a)*rr).toFixed(2));}return p.join(' ');}
 function flagSVG(l){
@@ -1079,6 +1146,145 @@ INSECTS.wingedant={hx:11,hy:0,hr:7,head:P=>P.b,antenna:shortAntennae,body(g,P,f)
 INSECTS.crane={hx:12,hy:-8,hr:7.1,head:P=>P.b,body(g,P,f){g.strokeStyle=P.d;g.lineWidth=1.2;for(const x of[-5,1]){g.beginPath();g.moveTo(x,5);g.lineTo(x-13,12);g.lineTo(x-23,11);g.stroke();}vEll(g,-6,3,12,6,0,P.b);g.strokeStyle=P.b;g.lineWidth=6;g.beginPath();g.moveTo(2,3);g.quadraticCurveTo(10,5,10,-7);g.stroke();g.save();g.translate(-4,1);g.rotate([1.05,.05,-1.05][f]);vEll(g,-5,0,10,4,0,P.g);g.restore();g.strokeStyle=g._K;g.lineWidth=1.7;},over(g,P){vEll(g,-1,-8,7,3,0,'#de4147',false);},mouth(g,P){g.beginPath();g.moveTo(7,1);g.lineTo(23,3);g.lineTo(8,5);g.closePath();g.fillStyle=P.o;g.fill();g.stroke();}};
 INSECTS.squirrel={hx:9,hy:0,hr:8.5,head:P=>P.b,body(g,P,f){g.save();g.rotate(-.14);vEll(g,-20,-1,9,10,-.45,P.b);vEll(g,-23,-3,4,6,-.4,P.h,false);g.restore();const sy=[1,.65,.85][f];g.save();g.scale(1,sy);g.beginPath();g.moveTo(4,-5);g.lineTo(-10,-15);g.quadraticCurveTo(-14,-3,-22,8);g.quadraticCurveTo(-9,5,3,10);g.closePath();g.fillStyle=insWash(g,-22,-15,28,25,P.h,P.G);g.fill();g.stroke();g.restore();vEll(g,-3,3,10,6,0,P.b);vEll(g,0,5,6,3,0,P.l,false);},antenna(g,P){for(const x of[-7,5]){vEll(g,x,-10,4,6,0,P.b);vEll(g,x,-10,2,3,0,P.l,false);}}};
 
+/* ===== 22 loài mới (chỉ có trong Blindbox) ===== */
+const ORIG_SPECIES_IDS=Object.keys(SPECIES);
+{const K=g=>g._K;
+const legs=(g,col,pts,w=1.3)=>{g.strokeStyle=col;g.lineWidth=w;for(const p of pts){g.beginPath();g.moveTo(p[0],p[1]);for(let i=2;i<p.length;i+=2)g.lineTo(p[i],p[i+1]);g.stroke();}g.strokeStyle=g._K;g.lineWidth=1.7;};
+const stroke2=(g,col,w,fn)=>{g.beginPath();fn();g.lineWidth=w+1.8;g.strokeStyle=g._K;g.stroke();g.lineWidth=w;g.strokeStyle=col;g.stroke();g.strokeStyle=g._K;g.lineWidth=1.7;};
+const NEW_SPECIES={
+ // ---------- Chim Việt Nam ----------
+ chaomao:{name:'Chào mào',price:110,pal:{b:'#7a5a44',h:'#a07a5e',l:'#f4ede2',d:'#4e3628',g:'#8c6a50',G:'#5a4030',o:'#2a2228',r:'#1a1418'},
+  vsp:{crest:(g,P)=>{g.fillStyle='#2a2228';g.beginPath();g.moveTo(-3,-9.5);g.quadraticCurveTo(-1,-17,3,-23);g.quadraticCurveTo(5,-15,7,-9.5);g.closePath();g.fill();g.stroke();},
+   beak:vCone(3.6),extra:(g,P)=>{vEll(g,3,-7,11,5.5,0,'#2a2228',false);vEll(g,7.5,2.2,4.4,3.2,0,'#ffffff',false);vEll(g,9.6,-0.6,2.3,1.8,0,'#e8343c',false);},
+   back:(g,P)=>vEll(g,-11,8.5,3.4,2.2,0.4,'#e8343c')}},
+ sao:{name:'Chim sáo',price:130,pal:{b:'#2c2a33',h:'#4a4856',l:'#3a3842',d:'#1a1820',g:'#3a3842',G:'#ffffff',o:'#ffc928',r:'#e0a810'},
+  vsp:{eye:'ring',ring:'#ffc928',beak:vCone(4.6),crest:(g,P)=>{g.fillStyle=P.b;g.beginPath();g.moveTo(6,-10);g.quadraticCurveTo(9,-15,11,-12);g.quadraticCurveTo(10,-10,9,-8);g.closePath();g.fill();g.stroke();},
+   extra:(g,P)=>{vEll(g,-6,3,4,2.6,0.3,'#ffffff',false);}}},
+ vanhkhuyen:{name:'Vành khuyên',price:70,pal:{b:'#9cc43e',h:'#c8e070',l:'#f4ec9a',d:'#6e9a2a',g:'#8ab436',G:'#5e8a24',o:'#3a3a3a',r:'#2a2a2a'},
+  vsp:{rx:12.2,ry:10.4,eye:'ring',ring:'#ffffff',crest:null,beak:vCone(3.4),cheekA:.3,extra:(g,P)=>vEll(g,9,3,4,3,0,'#f6e24a',false)}},
+ diec:{name:'Diệc xám',price:290,pal:{b:'#9aa6b2',h:'#c4ccd6',l:'#eef1f4',d:'#6e7a88',g:'#8a96a4',G:'#4e5866',o:'#f2c230',r:'#d8a018'},
+  vsp:{crest:(g,P)=>{for(const[x,y]of[[-15,-13],[-13,-10]])stroke2(g,'#2a2a30',1.4,()=>{g.moveTo(-1,-10);g.quadraticCurveTo(-7,-12,x,y);});},beak:vLong(25,-1.6,3.2),
+   extra:(g,P)=>{vEll(g,3,-8.6,8,1.8,-0.12,'#2a2a30',false);vEll(g,6,5,4,6,0.2,'#ffffff',false);for(const y of[2,5,8])vEll(g,7,y,1.2,.6,0,'#4e5866',false);},
+   back:(g,P)=>{for(const pts of[[[-1,9],[-1,19.5],[2.5,19.5]],[[3,9],[6,14],[2.5,16]]])stroke2(g,'#c8a040',1.6,()=>{g.moveTo(pts[0][0],pts[0][1]);for(const q of pts.slice(1))g.lineTo(q[0],q[1]);});}}},
+ tri:{name:'Chim trĩ',price:540,pal:{b:'#c8642a',h:'#e8944a',l:'#d8803a',d:'#8a3a18',g:'#a85a30',G:'#6a3018',o:'#d8c8a0',r:'#b8a880'},
+  vsp:{eye:'ring',ring:'#e0303a',beak:vCone(3.6),crest:(g,P)=>{for(const[x,y]of[[-3,-15],[0,-16]])stroke2(g,'#1f6a5a',1.6,()=>{g.moveTo(1,-10);g.lineTo(x,y);});},
+   extra:(g,P)=>{vEll(g,6.5,-6,9,7,0.15,'#1f6a5a',false);g.strokeStyle='#ffffff';g.lineWidth=1.4;g.beginPath();g.ellipse(4,1,9,7,0.2,0.6,1.6);g.stroke();g.strokeStyle=g._K;g.lineWidth=1.7;
+     g.fillStyle=P.d;for(const[x,y]of[[-6,2],[-2,6],[-8,7],[1,9],[-4,10]]){g.beginPath();g.ellipse(x,y,1.3,.8,0.5,0,7);g.fill();}},
+   tail:(g,P)=>{for(const[y,a,len]of[[-1,-0.22,15],[3,-0.05,13]]){g.save();g.translate(-12,y);g.rotate(a);vEll(g,-len,0,len,2.4,0,P.h);g.strokeStyle=P.d;g.lineWidth=1;for(let x=-4;x>-len*2+2;x-=3.5){g.beginPath();g.moveTo(x,-2);g.lineTo(x-1,2);g.stroke();}g.restore();g.strokeStyle=g._K;g.lineWidth=1.7;}}}},
+ // ---------- Chim khác ----------
+ hornbill:{name:'Hồng hoàng',price:470,pal:{b:'#2a2a30',h:'#4a4a52',l:'#f4f0e0',d:'#18181c',g:'#2a2a30',G:'#ffffff',o:'#f2c230',r:'#e08a20',k:'#0e0e14'},
+  vsp:{crest:null,belly:[4,6,8.5,5.6,-0.1],
+   beak:(g,P)=>{g.beginPath();g.moveTo(9.5,-3);g.quadraticCurveTo(20,-10,26,-3);g.quadraticCurveTo(24,0.5,22,1.8);g.quadraticCurveTo(16,1.4,10.4,3);g.closePath();g.fillStyle=P.o;g.fill();g.stroke();
+     g.beginPath();g.moveTo(10.4,3);g.quadraticCurveTo(17,2.2,22,1.8);g.quadraticCurveTo(17,6,10.6,6);g.closePath();g.fillStyle=P.r;g.fill();g.stroke();
+     g.beginPath();g.moveTo(9,-4);g.quadraticCurveTo(12,-12,20,-11);g.quadraticCurveTo(21,-7.5,18,-6.5);g.quadraticCurveTo(14,-6,10,-3);g.closePath();g.fillStyle='#f6d860';g.fill();g.stroke();},
+   tail:(g,P)=>{vEll(g,-17,1,8,3,-0.2,'#ffffff');vEll(g,-15.5,1.4,2,3,-0.2,'#1a1a20',false);vEll(g,-14,4.5,5,2.2,0.3,P.d);}}},
+ emperor:{name:'Cánh cụt hoàng đế',price:350,pal:{b:'#2e3040',h:'#4a4c64',l:'#ffffff',d:'#1c1e2a',g:'#40425a',G:'#25273a',o:'#ff9a30',r:'#e07818',k:'#141420'},
+  base:'penguin',vsp:{extra:(g,P)=>{vEll(g,8.5,1.5,3.4,4.4,0.3,'#ffc93a',false);vEll(g,5,7,6,3,0,'#fff3c4',false);}}},
+ parapenguin:{name:'Cánh cụt nhảy dù',price:240,pal:{b:'#2e2e40',h:'#4a4a64',l:'#ffffff',d:'#1c1c2a',g:'#40405a',G:'#25253a',o:'#ffa630',r:'#e07818',k:'#141420'},
+  base:'penguin',vsp:{back:(g,P)=>{vFeet(g,P);legs(g,'#8a8a96',[[-12,-17,-6,-7],[4,-17,1,-9],[-4,-19,-2,-10]],.8);
+   g.beginPath();g.moveTo(-15,-16);g.quadraticCurveTo(-4,-34,7,-16);g.closePath();g.fillStyle='#e8343c';g.fill();
+   g.save();g.clip();g.fillStyle='#ffffff';for(const x of[-9,-1])g.fillRect(x,-30,4,16);g.restore();g.stroke();
+   for(const x of[-11,-5,1])vEll(g,x+1.5,-16,3,1.2,0,'#c8202a');}}},
+ albatross:{name:'Hải âu lớn',price:330,pal:{b:'#ffffff',h:'#ffffff',l:'#ffffff',d:'#d8dde4',g:'#3a3a44',G:'#14141a',o:'#f2b8a0',r:'#e8a088'},
+  vsp:{wingS:1.28,crest:null,beak:(g,P)=>{vLong(21,-2,3.4)(g,P);vEll(g,20.2,1.6,1.2,1.4,0,'#d88068');},extra:(g,P)=>{vEll(g,4,-5,5.6,2.4,-0.2,'#e2e6ec',false);},
+   tail:(g,P)=>{vEll(g,-14,0.5,5.4,2.8,-0.3,'#3a3a44');vEll(g,-13.5,4,5,2.4,0.25,'#ffffff');}}},
+ cugay:{name:'Cu gáy',price:85,pal:{b:'#b49a8a',h:'#cdb8aa',l:'#e6d4c8',d:'#8a7464',g:'#a08878',G:'#6a5444',o:'#5a4a48',r:'#3a2e2c'},
+  vsp:{crest:null,beak:vCone(3.6),eye:'ring',ring:'#e8a080',
+   extra:(g,P)=>{vEll(g,-3.5,-1.5,4.6,3.4,-0.5,'#2a2228',false);g.fillStyle='#ffffff';for(const[x,y]of[[-5.5,-2.5],[-3.5,-3.4],[-1.6,-2.2],[-4.6,-0.2],[-2.4,0],[-6,0.8]]){g.beginPath();g.arc(x,y,0.65,0,7);g.fill();}}}},
+ // ---------- Côn trùng ----------
+ muoi:{name:'Muỗi',price:35,insect:true,pal:{b:'#6a6a78',h:'#9a9aa8',l:'#d8d8e0',d:'#2e2e38',g:'#e6f2ff',G:'#9ab0c4'},
+  ins:{hx:10,hy:-2,hr:6.8,head:P=>P.b,
+   antenna:(g,P)=>{g.strokeStyle=P.d;g.lineWidth=1.3;for(const x of[-2,3]){g.beginPath();g.moveTo(x,-9);g.lineTo(x-3,-19);g.stroke();for(let i=0;i<4;i++){g.beginPath();g.moveTo(x-1-i*.7,-12-i*2);g.lineTo(x-4-i*.7,-13-i*2);g.moveTo(x-1-i*.7,-12-i*2);g.lineTo(x+1.5-i*.7,-14-i*2);g.stroke();}}g.strokeStyle=g._K;},
+   body(g,P,f){legs(g,P.d,[[-2,3,-10,11,-16,20],[1,4,-2,13,-6,21],[3,4,8,12,6,21],[-4,3,-14,6,-22,9]],.9);
+     g.save();g.translate(-2,1);g.rotate(-0.12);vEll(g,-11,2,11,3.4,0,P.b);g.fillStyle=P.d;g.beginPath();g.ellipse(-11,2,11,3.4,0,0,7);g.save();g.clip();for(let x=-20;x<0;x+=4)g.fillRect(x,-4,1.8,10);g.restore();g.restore();
+     vEll(g,2,0,4.6,4,0,P.b);lightWings(g,P,f,13,3.2);},
+   mouth(g,P){stroke2(g,P.d,1.2,()=>{g.moveTo(8,4);g.lineTo(23,9);});}}},
+ ruoi:{name:'Ruồi',price:45,insect:true,pal:{b:'#2a6a6a',h:'#5ab0a8',l:'#c8e8e0',d:'#1a3a3a',g:'#e8f4ff',G:'#9ab4c8'},
+  ins:{hx:10,hy:0,hr:7.4,head:P=>mixHex(P.b,'#2a2228',.4),eyeR:3.8,
+   over(g,P){vEll(g,3,-4,7,7.4,0,'#c8282a');g.fillStyle='#e8584a';for(const[x,y]of[[1,-7],[4,-6],[2,-3],[5,-2.5]]){g.beginPath();g.arc(x,y,.9,0,7);g.fill();}},
+   body(g,P,f){legs(g,'#1a1a20',[[-6,5,-9,11],[-1,5,-1,11.5],[3,5,6,11]],1.2);
+     vEll(g,-8,2,10,6.5,0,insWash(g,-18,-4,20,13,P.h,P.b));g.globalAlpha=.5;vEll(g,-10,-1,5,1.6,-0.2,'#ffffff',false);g.globalAlpha=1;vEll(g,1,0,5,5,0,P.d);lightWings(g,P,f,12,4);}}},
+ bongua:{name:'Bọ ngựa',price:270,insect:true,pal:{b:'#7cc04a',h:'#b8e488',l:'#e4f6c8',d:'#3e7a2a',g:'#c8f0a0',G:'#6aa040'},
+  ins:{hx:11,hy:-7,hr:7,head:P=>P.b,antenna:(g,P)=>{g.strokeStyle=P.d;g.lineWidth=1.1;for(const x of[-2,3]){g.beginPath();g.moveTo(x,-9);g.quadraticCurveTo(x-6,-20,x-14,-22);g.stroke();}g.strokeStyle=g._K;},
+   body(g,P,f){legs(g,P.d,[[-8,5,-14,12,-18,14],[-3,5,-4,12,-8,14]],1.1);vEll(g,-11,3,11,4.6,0.05,insWash(g,-22,-2,22,10,P.b,P.d));lightWings(g,P,f,15,3.6);
+     g.strokeStyle=P.b;g.lineWidth=4.5;g.beginPath();g.moveTo(-1,2);g.quadraticCurveTo(5,-1,9,-5);g.stroke();g.strokeStyle=g._K;g.lineWidth=1.7;
+     stroke2(g,P.b,2.6,()=>{g.moveTo(5,0);g.lineTo(13,3);g.lineTo(9,9);});g.strokeStyle=P.d;g.lineWidth=.8;for(const[x,y]of[[10,5],[11.5,4],[9.5,7]]){g.beginPath();g.moveTo(x,y);g.lineTo(x-1.5,y+.6);g.stroke();}g.strokeStyle=g._K;g.lineWidth=1.7;}}},
+ vekim:{name:'Chuồn chuồn kim',price:190,insect:true,fast:2,pal:{b:'#3a7ae0',h:'#8ad0ff',l:'#e6f6ff',d:'#1a3a80',g:'#e8f4ff',G:'#8aa8d0'},
+  ins:{hx:9,hy:-1,hr:7.6,head:P=>P.b,over(g,P){vEll(g,3.6,-3.8,7,6.6,0,insWash(g,-4,-11,15,14,mixHex(P.h,P.b,.3),P.b));},
+   body(g,P,f){const a=[-.75,-.25,.25][f];
+     const wing=(da)=>{g.save();g.translate(0,-3);g.rotate(a+da);g.beginPath();g.ellipse(-10,0,11,1.9,0,0,7);g.globalAlpha=.55;g.fillStyle=P.g;g.fill();g.globalAlpha=1;g.lineWidth=1;g.stroke();vEll(g,-19,-.2,1.4,.9,0,P.d,false);g.restore();g.lineWidth=1.7;};
+     wing(.2);for(let i=9;i>=0;i--){const x=-3.5-i*2.6,y=1+i*.2;vEll(g,x,y,1.6,1.15,0,i===9?P.d:(i%2?P.d:P.b));}vEll(g,1.5,0,4.4,3.8,0,insWash(g,-3,-4,9,8,P.b,P.d));wing(0);}}},
+ buomphuong:{name:'Bướm phượng',price:230,insect:true,pal:{b:'#ffd84a',h:'#fff0a0',l:'#7ac0ff',d:'#1e1a1a',g:'#ffe680',G:'#e8a020'},
+  ins:{base:'butterfly',body(g,P,f){const sy=[1,.48,-.62][f];if(!g._wingless){g.save();g.translate(0,-1.5);g.scale(1,sy);stroke2(g,P.d,2,()=>{g.moveTo(-15,-14);g.quadraticCurveTo(-20,-10,-23,-5);});vEll(g,-23,-5,1.6,1.6,0,P.d);g.restore();}
+     INSECTS.butterfly.body(g,P,f);if(!g._wingless){g.save();g.translate(0,-1.5);g.scale(1,sy);g.strokeStyle=P.d;g.lineWidth=1.6;for(const[x0,y0,x1,y1]of[[-2,-6,-6,-20],[1,-8,1,-21]]){g.beginPath();g.moveTo(x0,y0);g.lineTo(x1,y1);g.stroke();}g.restore();g.strokeStyle=g._K;g.lineWidth=1.7;}}}},
+ // ---------- Loài khác ----------
+ cadu:{name:'Cá đuối bay',price:410,group:'other',pal:{b:'#3a4a6a',h:'#6a7a9a',l:'#f0f4f8',d:'#20283a',g:'#4a5a7a',G:'#2a3450'},
+  ins:{hx:9,hy:0,hr:7.6,head:P=>P.b,
+   antenna(g,P){for(const s of[-1,1]){g.beginPath();g.moveTo(6,s*4-2);g.quadraticCurveTo(16,s*6-4,14,s*9-2);g.quadraticCurveTo(10,s*7,7,s*5);g.closePath();g.fillStyle=P.b;g.fill();g.stroke();}},
+   body(g,P,f){const sy=[1,.35,-.75][f];stroke2(g,P.d,1.2,()=>{g.moveTo(-14,2);g.quadraticCurveTo(-24,4,-31,0);});
+     g.save();g.translate(-2,1);g.scale(1,sy);g.beginPath();g.moveTo(6,-2);g.quadraticCurveTo(-2,-14,-20,-22);g.quadraticCurveTo(-16,-10,-14,1);g.closePath();g.fillStyle=insWash(g,-20,-22,26,24,P.h,P.b);g.fill();g.stroke();g.restore();
+     vEll(g,-4,2,11,6,0,P.b);vEll(g,-3,4.5,8,2.4,0,P.l,false);}}},
+ rong:{name:'Rồng con',price:950,group:'other',pal:{b:'#4cb86a',h:'#9ee0a8',l:'#f4e6a8',d:'#2a7a44',g:'#f08a4a',G:'#b0522a'},
+  ins:{hx:9,hy:-3,hr:9,head:P=>P.b,
+   antenna(g,P){for(const x of[-5,3]){g.beginPath();g.moveTo(x,-9);g.quadraticCurveTo(x-2,-17,x-7,-20);g.quadraticCurveTo(x-2,-14,x+4,-10);g.closePath();g.fillStyle=P.l;g.fill();g.stroke();}},
+   mouth(g,P){g.beginPath();g.arc(8.2,3.6,2.4,0.1,Math.PI-0.3);g.stroke();for(const x of[13,15])vEll(g,x,1.5,.8,.6,0,'#1a3a24',false);g.globalAlpha=.75;for(const[x,y,r]of[[16,-4,2.6],[19,-7,2],[21.5,-10,1.4]])vEll(g,x,y,r,r,0,'#eef0f2');g.globalAlpha=1;},
+   body(g,P,f){const sy=[1,.45,-.6][f];
+     stroke2(g,P.b,3.4,()=>{g.moveTo(-8,5);g.quadraticCurveTo(-20,10,-26,3);});g.beginPath();g.moveTo(-26,3);g.lineTo(-31,-1);g.lineTo(-29,5);g.closePath();g.fillStyle=P.g;g.fill();g.stroke();
+     g.save();g.translate(-2,-2);g.scale(1,sy);g.beginPath();g.moveTo(3,2);g.quadraticCurveTo(-6,-16,-22,-20);g.lineTo(-19,-9);g.quadraticCurveTo(-15,-12,-12,-5);g.quadraticCurveTo(-8,-9,-5,-1);g.closePath();g.fillStyle=insWash(g,-22,-20,26,22,P.g,P.G);g.fill();g.stroke();
+       g.strokeStyle=P.G;g.lineWidth=1;g.beginPath();g.moveTo(1,1);g.lineTo(-20,-17);g.moveTo(1,1);g.lineTo(-12,-5);g.stroke();g.restore();g.strokeStyle=g._K;g.lineWidth=1.7;
+     vEll(g,-4,3,11,8.4,0,insWash(g,-15,-5,22,17,P.b,P.d));vEll(g,-2,6,6.5,4.6,0,P.l,false);
+     g.fillStyle=P.g;for(const x of[-12,-7,-2]){g.beginPath();g.moveTo(x-2,-4.5);g.lineTo(x,-8.5);g.lineTo(x+2,-4.5);g.closePath();g.fill();g.stroke();}
+     vEll(g,-6,10.5,2.6,1.6,0,P.d);vEll(g,1,10.5,2.6,1.6,0,P.d);}}},
+ kylan:{name:'Kỳ lân có cánh',price:880,group:'other',pal:{b:'#fbf6ff',h:'#ffffff',l:'#f4e8ff',d:'#c8b8e0',g:'#ffffff',G:'#d8c8f0'},
+  ins:{hx:10,hy:-4,hr:8.6,head:P=>P.b,
+   antenna(g,P){g.beginPath();g.moveTo(2,-10);g.lineTo(7,-25);g.lineTo(7.5,-9.5);g.closePath();g.fillStyle='#ffd23a';g.fill();g.stroke();g.strokeStyle='#d99a0a';g.lineWidth=1;for(const y of[-14,-18,-22]){g.beginPath();g.moveTo(3.2+(-10-y)*.2,y+1);g.lineTo(7.5,y-.5);g.stroke();}g.strokeStyle=g._K;
+     for(const[x,y,c]of[[-6,-6,'#ff8ab8'],[-8,0,'#9a7af0'],[-7,6,'#7ad0ff']])vEll(g,x,y,4.4,3.6,0,c);
+     g.beginPath();g.moveTo(-2,-9);g.lineTo(-1,-15);g.lineTo(2,-10);g.closePath();g.fillStyle=P.b;g.fill();g.stroke();},
+   mouth(g,P){vEll(g,9,5,3,2.4,0,'#f4dcef');for(const x of[8,10])vEll(g,x,5,.5,.6,0,'#9a7a98',false);g.beginPath();g.arc(8,7,1.6,.3,Math.PI-.3);g.stroke();},
+   body(g,P,f){legs(g,P.d,[[-10,7,-12,13],[-4,8,-4,14],[1,7,3,13]],2.2);
+     g.save();g.translate(-13,1);for(const[a,c]of[[-.35,'#ff8ab8'],[0,'#9a7af0'],[.35,'#7ad0ff']]){g.save();g.rotate(a);vEll(g,-7,0,8,2.2,0,c);g.restore();}g.restore();
+     vEll(g,-5,2,12,7.4,0,insWash(g,-17,-5,24,15,P.b,P.d));
+     const ang=[1,.1,-.9][f];g.save();g.translate(-3,-3);g.rotate(-ang*.6-.4);for(const[len,w]of[[17,4.2],[14,3.6],[11,3]]){vEll(g,-len*.5,-w*.2,len*.55,w,0,P.g);}g.strokeStyle=P.G;g.lineWidth=.9;for(const x of[-5,-9,-13]){g.beginPath();g.moveTo(x,-2);g.lineTo(x-2,2);g.stroke();}g.restore();g.strokeStyle=g._K;g.lineWidth=1.7;}}},
+ heo:{name:'Heo bay',price:150,group:'other',pal:{b:'#f8a8b8',h:'#ffd0da',l:'#ffe4ea',d:'#d87890',g:'#ffffff',G:'#d8dce8'},
+  ins:{hx:9,hy:-2,hr:9,head:P=>P.b,
+   antenna(g,P){for(const x of[-5,3]){g.beginPath();g.moveTo(x,-8);g.lineTo(x-1,-16);g.lineTo(x+5,-10);g.closePath();g.fillStyle=P.d;g.fill();g.stroke();}},
+   mouth(g,P){vEll(g,11,3,3.4,2.8,0,mixHex(P.b,P.d,.35));vEll(g,10,3,.7,1,0,'#7a3a4a',false);vEll(g,12.2,3,.7,1,0,'#7a3a4a',false);},
+   body(g,P,f){stroke2(g,P.d,1.3,()=>{g.moveTo(-16,0);g.bezierCurveTo(-22,-4,-22,4,-18,2);g.quadraticCurveTo(-16,0,-19,-3);});
+     legs(g,P.d,[[-9,8,-9,12],[-3,9,-3,13],[2,8,2,12]],2.6);
+     vEll(g,-4,1.5,12.5,9.6,0,insWash(g,-16,-8,25,19,P.b,P.d));vEll(g,-3,5,7,4,0,P.l,false);
+     const a=[-.9,-.15,.6][f];g.save();g.translate(-5,-6);g.rotate(a);for(const[x,y,rx]of[[-7,0,6.5],[-6,2.6,5],[-4,4.6,3.6]])vEll(g,x,y,rx,2.4,0,P.g);g.restore();}}},
+ draco:{name:'Thằn lằn bay',price:300,group:'other',pal:{b:'#8aa05a',h:'#b8cc80',l:'#e8eec8',d:'#4e6230',g:'#f0902a',G:'#a05010'},
+  ins:{hx:11,hy:-1,hr:7,head:P=>P.b,mouth(g,P){g.beginPath();g.moveTo(4,4);g.quadraticCurveTo(9,6.5,13,3.5);g.stroke();g.beginPath();g.moveTo(5,6);g.quadraticCurveTo(8,13,11,7);g.closePath();g.fillStyle='#ffd23a';g.fill();g.stroke();},
+   body(g,P,f){stroke2(g,P.b,2.4,()=>{g.moveTo(-10,3);g.quadraticCurveTo(-22,6,-31,1);});legs(g,P.d,[[-8,4,-12,10],[0,4,3,10]],1.6);
+     const sy=[1,.4,-.7][f];g.save();g.translate(-4,1);g.scale(1,sy);g.beginPath();g.moveTo(3,0);g.quadraticCurveTo(-2,-13,-11,-15);g.quadraticCurveTo(-15,-8,-12,0);g.closePath();g.fillStyle=insWash(g,-15,-15,18,15,P.g,P.G);g.fill();g.stroke();
+       g.strokeStyle=P.G;g.lineWidth=1.1;for(const x of[-2,-6,-9]){g.beginPath();g.moveTo(x+1,-1);g.lineTo(x-1,-12);g.stroke();}g.restore();g.strokeStyle=g._K;g.lineWidth=1.7;
+     vEll(g,-3,2,10,4.4,0,insWash(g,-13,-2,20,9,P.b,P.d));g.fillStyle=P.d;for(const x of[-9,-5,-1])vEll(g,x,0,1.2,.8,0,P.d,false);}}},
+ ptero:{name:'Khủng long bay',price:620,group:'other',pal:{b:'#c8784a',h:'#e8a070',l:'#f4d8b8',d:'#7a4228',g:'#d89060',G:'#8a4a2a'},
+  ins:{hx:10,hy:-3,hr:8,head:P=>P.b,
+   antenna(g,P){g.beginPath();g.moveTo(-6,-6);g.quadraticCurveTo(-18,-18,-22,-14);g.quadraticCurveTo(-12,-8,-4,-1);g.closePath();g.fillStyle='#e8584a';g.fill();g.stroke();},
+   mouth(g,P){g.beginPath();g.moveTo(8,0);g.lineTo(24,4.5);g.lineTo(8,6);g.closePath();g.fillStyle='#f2c230';g.fill();g.stroke();g.beginPath();g.moveTo(9,3.6);g.lineTo(21,4.6);g.stroke();},
+   body(g,P,f){const sy=[1,.4,-.7][f];legs(g,P.d,[[-6,7,-10,12],[-1,7,-2,13]],1.8);
+     g.save();g.translate(-2,-1);g.scale(1,sy);g.beginPath();g.moveTo(4,0);g.lineTo(-6,-20);g.lineTo(-28,-16);g.quadraticCurveTo(-18,-8,-13,2);g.closePath();g.fillStyle=insWash(g,-28,-20,32,22,P.g,P.G);g.fill();g.stroke();
+       g.strokeStyle=P.G;g.lineWidth=1.1;g.beginPath();g.moveTo(2,-1);g.lineTo(-6,-19);g.lineTo(-27,-16);g.stroke();g.restore();g.strokeStyle=g._K;g.lineWidth=1.7;
+     vEll(g,-5,2,10,6.5,0,insWash(g,-15,-4,20,13,P.b,P.d));vEll(g,-4,4.5,6,3,0,P.l,false);}}},
+ dieu:{name:'Diều giấy',price:120,group:'other',pal:{b:'#e8343c',h:'#ff8a7a',l:'#ffd23a',d:'#a01e26',g:'#ffd23a',G:'#3a7ad8'},
+  ins:{hx:2,hy:-3,hr:6.8,head:P=>'#fff4dc',
+   body(g,P,f){const w=[-3,0,3][f];g.strokeStyle='#5a4a3a';g.lineWidth=.8;g.beginPath();g.moveTo(4,6);g.quadraticCurveTo(14,14,28,20);g.stroke();
+     g.strokeStyle=P.G;g.lineWidth=1.6;g.beginPath();g.moveTo(-14,8);g.bezierCurveTo(-18,8+w,-22,12-w,-28,12+w);g.stroke();
+     for(const[x,y]of[[-18,9.5+w*.5],[-24,12]])for(const s of[-1,1]){g.beginPath();g.moveTo(x,y);g.lineTo(x+2.5*s,y-2);g.lineTo(x+2.5*s,y+2);g.closePath();g.fillStyle=s<0?P.l:P.G;g.fill();}
+     g.strokeStyle=g._K;g.lineWidth=1.7;
+     g.beginPath();g.moveTo(2,-21);g.lineTo(16,-3);g.lineTo(2,9);g.lineTo(-14,-3);g.closePath();g.fillStyle=P.b;g.fill();
+     g.save();g.clip();g.fillStyle=P.l;g.beginPath();g.moveTo(2,-21);g.lineTo(16,-3);g.lineTo(2,-3);g.closePath();g.fill();g.beginPath();g.moveTo(2,9);g.lineTo(-14,-3);g.lineTo(2,-3);g.closePath();g.fill();g.restore();
+     g.stroke();g.strokeStyle=P.d;g.lineWidth=1;g.beginPath();g.moveTo(2,-21);g.lineTo(2,9);g.moveTo(-14,-3);g.lineTo(16,-3);g.stroke();g.strokeStyle=g._K;g.lineWidth=1.7;}}},
+};
+for(const [id,o] of Object.entries(NEW_SPECIES)){
+  SPECIES[id]={name:o.name,price:o.price,pal:o.pal,...(o.insect?{insect:true}:{}),...(o.group?{group:o.group}:{}),...(o.fast?{fast:o.fast}:{})};
+  if(o.vsp)VSP[id]=o.base?{...VSP[o.base],...o.vsp}:o.vsp;
+  if(o.ins)INSECTS[id]=o.ins.base?{...INSECTS[o.ins.base],...o.ins}:o.ins;
+}
+}
+
+
 const SCARVES={none:{name:'Không',price:0},redscarf:{name:'Khăn choàng đỏ',price:90,en:'Red scarf'},plaid:{name:'Khăn caro',price:110,en:'Plaid scarf'},bow:{name:'Nơ cổ',price:70,en:'Bow tie'},tie:{name:'Cà vạt nhỏ',price:85,en:'Little necktie'}};
 const GEARS={none:{name:'Không',price:0},backpack:{name:'Ba lô mini',price:130,en:'Mini backpack'},mailbag:{name:'Túi thư người đưa tin',price:150,en:'Messenger bag'},oxygen:{name:'Bình dưỡng khí',price:200,en:'Space oxygen tank'},starpendant:{name:'Dây chuyền ngôi sao',price:120,en:'Star necklace'},bell:{name:'Vòng cổ chuông nhỏ',price:100,en:'Bell collar'},heartbadge:{name:'Huy hiệu trái tim',price:80,en:'Heart badge'},olive:{name:'Cành ô liu',price:90,en:'Olive branch'},flower:{name:'Bông hoa',price:75,en:'Flower'},letter:{name:'Lá thư',price:95,en:'Letter'}};
 const PATTERNS={none:{name:'Không',price:0},dots:{name:'Chấm bi',price:120,en:'Polka dots'},tiger:{name:'Sọc hổ',price:150,en:'Tiger stripes'},stars:{name:'Ngôi sao',price:180,en:'Stars'},galaxy:{name:'Thiên hà',price:240,en:'Galaxy'}};
@@ -1111,6 +1317,7 @@ function pixelMenuIcons(){if(gfxMode()!=='classic')return;const q=classicSpriteP
   img.src='data:image/svg+xml,'+encodeURIComponent(svg.outerHTML.replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" ').replace('currentColor',color));
  }}
 function renderMainIcons(){
+ if(typeof renderGiftIcon==='function')renderGiftIcon();
  if(legacy()){for(const [id,ic,vi,en]of [['bShop','🛒','Cửa hàng','Shop'],['bAch','🏆','Thành tựu','Awards'],['bRank','📊','Xếp hạng','Ranks']]){const b=$(id);b.removeAttribute('data-i18n');b.textContent=ic+' '+L(vi,en);b.setAttribute('aria-label',L(vi,en));}
   $('bGraphics').textContent='⚙';$('bSound').textContent=save.settings.sound?'🔊':'🔇';$('bVibe').textContent=save.settings.vibe?'📳':'📴';$('mPrev').textContent='◀';$('mNext').textContent='▶';
   const gb=$('bGhost');if(gb.querySelector('svg,canvas')){const t=gb.textContent.trim();gb.textContent='👻 '+t.replace(/^👻\s*/,'');}return;}
@@ -2955,7 +3162,14 @@ function renderModal(){
   else if(modalKind==='lang'){$('mTitle').textContent=L('🌐 Ngôn ngữ','🌐 Language');tabs.style.display='none';renderLang(body);return;}
   tabs.style.display='flex';tabs.scrollLeft=tabLeft;
 }
+// Tab Loài: 20 loài bán bằng xu (theo giá), sau đó là các loài Blindbox (thường trước, hiếm sau).
+function speciesShopList(){
+  const head=[['random','Ngẫu nhiên',0]],ok=id=>legacy()?legacyOK('species',id):(speciesGroup==='all'||speciesGroupOf(id)===speciesGroup);
+  const shop=SHOP_SPECIES.filter(ok).map(id=>[id,SPECIES[id].name,SPECIES[id].price]);
+  const box=BOX_SPECIES.filter(ok).sort((a,b)=>(RARE_SET.has(a)-RARE_SET.has(b))||BOX_SPECIES.indexOf(a)-BOX_SPECIES.indexOf(b)).map(id=>[id,SPECIES[id].name,-1]);
+  return head.concat(shop,box);}
 function shopList(cat){
+  if(cat==='species')return speciesShopList();
   const src={species:SPECIES,color:BIRD_COLORS,hat:HATS,glass:GLASSES,pipe:PIPES,bg:BGS,scarf:SCARVES,gear:GEARS,pattern:PATTERNS}[cat];
   const head=[];if(cat==='color')head.push(['natural','Màu gốc của loài',0]);if(cat!=='hat'&&cat!=='glass')head.push(['random','Ngẫu nhiên',0]);
   if(cat==='color'&&!legacy())head.push(['custom',src.custom.name,src.custom.price]);
@@ -2966,6 +3180,7 @@ function shopList(cat){
 const previewBgCache={};
 const shopPreviewCache=new Map(),SHOP_PREVIEW_LIMIT=48;
 function preview(cat,id){
+  if(cat==='species'&&isBoxSpecies(id)&&!save.owned.species.includes(id))return silhouettePreview(id);
   const keyedSpecies=['color','hat','glass',...DECOR_CATS].includes(cat)?previewSpecies():'',keyedColor=['hat','glass',...DECOR_CATS].includes(cat)?save.equip.color:'';
   const key=[gfxMode(),save.settings.pixel,cat,id,keyedSpecies,keyedColor,save.equip.hat,save.equip.glass,save.settings.customColor,...DECOR_CATS.map(k=>save.equip[k])].join('|');let base=shopPreviewCache.get(key);
   if(base){shopPreviewCache.delete(key);shopPreviewCache.set(key,base);}else{base=buildShopPreview(cat,id);shopPreviewCache.set(key,base);
@@ -2997,11 +3212,14 @@ function renderShop(body){
 const grid=document.createElement('div');grid.className='grid';
   for(const[id,name,price]of shopList(cat)){const owned=id==='custom'||id==='random'||id==='none'||id==='natural'||save.owned[cat].includes(id),eq=save.equip[cat]===id;
     const card=document.createElement('div');card.dataset.item=id;card.className='card'+(eq?' eq':'')+(cat==='species'&&id===previewSpecies()?' previewing':'');const image=preview(cat,id);
-    if(cat==='species'&&SPECIES[id]&&!legacy()){image.className='species-preview';image.tabIndex=0;image.setAttribute('role','button');image.setAttribute('aria-label',L('Chọn loài: ','Select species: ')+tr(name));image.title=L('Chạm để chọn loài này và xem màu ở tab Màu sắc','Tap to select this species, then view colors in Colors');
+    if(cat==='species'&&SPECIES[id]&&!legacy()&&!(isBoxSpecies(id)&&!save.owned.species.includes(id))){image.className='species-preview';image.tabIndex=0;image.setAttribute('role','button');image.setAttribute('aria-label',L('Chọn loài: ','Select species: ')+tr(name));image.title=L('Chạm để chọn loài này và xem màu ở tab Màu sắc','Tap to select this species, then view colors in Colors');
       const select=()=>{shopPreviewSpecies=id;SFX.play('click');for(const item of grid.querySelectorAll('.card')){const selected=item.dataset.item===id;item.classList.toggle('previewing',selected);item.setAttribute('aria-selected',String(selected));}};card.addEventListener('click',e=>{if(!e.target.closest('button,input,canvas'))select();});image.onclick=select;image.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();select();}};}
+    const locked=cat==='species'&&isBoxSpecies(id)&&!owned;
+    if(locked){image.className='silhouette';image.onclick=null;image.onkeydown=null;image.removeAttribute('role');image.removeAttribute('tabindex');image.title='';image.setAttribute('aria-label',L('Loài bí ẩn trong Blindbox','Mystery species in the Blindbox'));}
     card.appendChild(image);
-    const n=document.createElement('div');n.className='cn';n.textContent=tr(name);card.appendChild(n);
+    const n=document.createElement('div');n.className='cn';n.textContent=locked?'\u00a0':tr(name);card.appendChild(n);
     const b=document.createElement('button');b.className='btn sm';
+    if(locked){b.textContent='???';b.disabled=true;card.appendChild(b);grid.appendChild(card);continue;}
     if(eq)b.textContent=tr('Đang dùng');else if(owned)b.textContent=tr('Dùng');else b.innerHTML=`<i class="coin"></i>${price}`;
     b.onclick=()=>{if(eq)return;if(!owned){if(save.coins<price){toast(L('Chưa đủ xu! Chơi thêm để kiếm xu nhé 💪','Not enough coins! Play more to earn some 💪'));SFX.play('click');return;}
         save.coins-=price;save.owned[cat].push(id);SFX.play('buy');toast(L(`Đã mua ${name}!`,`Bought ${tr(name)}!`));}else SFX.play('click');
@@ -3012,6 +3230,7 @@ const grid=document.createElement('div');grid.className='grid';
   const wrap=document.createElement('div');wrap.className='shopwrap';wrap.appendChild(grid);body.appendChild(wrap);
   const ch=grid.firstChild?grid.firstChild.offsetHeight:0;if(ch)wrap.style.height=(ch*3+u*6*2+u*4)+'px';
   const note=document.createElement('div');note.className='small';note.style.marginTop='calc(var(--u)*8)';
+  if(cat==='species'){const bn=document.createElement('div');bn.className='small';bn.style.marginTop='calc(var(--u)*6)';bn.textContent=L('🎁 Bóng đen là loài bí ẩn: chỉ mở được bằng Blindbox ở màn hình chính, không bán bằng xu.','🎁 Silhouettes are mystery species: unlock them from the Blindbox on the main screen; they can\'t be bought with coins.');body.appendChild(bn);}
   note.textContent=legacy()&&cat==='species'?L('Các loài chỉ khác nhau về hình dáng, độ khó như nhau. "Ngẫu nhiên" đổi loài mỗi ván trong số loài bạn có.','Species only differ in looks; difficulty is the same. "Random" picks one of your species each round.'):cat==='species'?L('Mọi loài chỉ khác nhau về hình dáng, độ khó như nhau. Chạm vào hình để đánh dấu loài; xem màu tại tab Màu sắc; nút bên dưới để mua hoặc dùng loài. "Ngẫu nhiên" đổi loài mỗi ván trong số loài bạn có.','All species only differ in looks; difficulty is the same. Tap an image to select a species; view its colors in Colors; use the button below to buy or equip the species. "Random" picks one of your species each round.'):(cat==='color'?L('"Màu gốc" giữ màu tự nhiên của loài. "Ngẫu nhiên" đổi màu mỗi ván trong số màu bạn có.','"Natural colors" keeps the species\' own colors. "Random" picks one of your colors each round.'):(cat==='bg'?L('Hình nền là phong cảnh xa phía sau. Đồng lúa vàng, khu chung cư, cảnh Tết và các danh thắng xuất hiện nối tiếp ngẫu nhiên trong lúc bay, ngày đêm cũng tự chuyển dần.','Scenery is the distant view. Golden rice fields, apartment blocks, Tết scenes and landmarks appear as random scrolling scenes during play, and day turns to night gradually.'):L('"Ngẫu nhiên" sẽ chọn ngẫu nhiên trong các món bạn đang có mỗi ván. Ngày/đêm và thời tiết luôn ngẫu nhiên.','"Random" picks one of your items each round. Time of day and weather are always random.')));body.appendChild(note);
 }
 function applyEquip(cat){if(DECOR_CATS.includes(cat)){resolveDecor();shopPreviewCache.clear();warmBird(G.speciesKey,G.colorKey,save.equip.hat,save.equip.glass);}if(G.state!=='title')return;if(cat==='species'||cat==='color'||cat==='hat'||cat==='glass'){G.speciesKey=save.equip.species==='random'?pick(ownedReal('species')):save.equip.species;G.colorKey=save.equip.color==='random'?pick(ownedReal('color')):save.equip.color;warmBird(G.speciesKey,G.colorKey,save.equip.hat,save.equip.glass);}
@@ -3171,7 +3390,7 @@ window.addEventListener('resize',onRz);window.addEventListener('orientationchang
 /* ================== ĐIỀU KHIỂN ================== */
 function onTap(){if(VIEW.switching||modalOpen()||G.paused)return;if(G.state==='ready')startPlay();else if(G.state==='play')flap();}
 // One primary input stream: never process the synthetic mouse event after touch.
-const isUI=t=>t&&t.closest&&t.closest('button,input,.modal,a,img');
+const isUI=t=>t&&t.closest&&t.closest('button,input,.modal,a,img,#boxScr');
 const gamePress=()=>{if(!SFX.a||SFX.a.state==='suspended')SFX.ensure();onTap();};
 if(window.PointerEvent){stage.addEventListener('pointerdown',e=>{if(!e.isPrimary||isUI(e.target)||(e.pointerType==='mouse'&&e.button!==0))return;gamePress();},{passive:true});}
 else{let lastTouch=-1000;stage.addEventListener('touchstart',e=>{if(isUI(e.target))return;lastTouch=performance.now();if(e.cancelable)e.preventDefault();if(e.touches.length===1)gamePress();},{passive:false});
@@ -3207,7 +3426,7 @@ function loop(now){let dt=(now-last)/1000;last=now;if(dt>0.05)dt=0.05;if(dt<0)dt
   // Keep menu scenery moving. A modal must still suspend an active flight.
   const modalBlocksFlight=modern()&&modalOpen()&&['ready','play','dying'].includes(G.state);
   if(!G.paused&&!modalBlocksFlight&&!VIEW.switching&&dt>0){const n=Math.max(1,Math.ceil(dt/STEP-0.01)),h=dt/n;for(let i=0;i<n;i++)update(h,i===n-1?dt:0);}
-  draw();
+  if(!(typeof BXS!=='undefined'&&BXS.open))draw();
   {const busy=G.state==='play'||G.state==='ready'||G.state==='dying';if(modalBlocksFlight)runWork(3);else if(!busy)runWork(4);else if(dt<0.02)runWork(1.2);}
   // máy yếu: nếu đang chơi mà trung bình < ~48 khung/giây thì giảm độ phân giải vẽ
   if(smooth()&&G.state==='play'&&!G.paused&&!modalBlocksFlight&&!VIEW.switching&&dt>0){perfT+=dt;perfN++;if(perfN>=150){if(perfT/perfN>0.021&&DPR_CAP>1.01){DPR_CAP=DPR_CAP>1.6?1.5:1;resize();}perfT=0;perfN=0;}}else{perfT=0;perfN=0;}
@@ -3215,7 +3434,261 @@ function loop(now){let dt=(now-last)/1000;last=now;if(dt>0.05)dt=0.05;if(dt<0)dt
 SFX.prepare();load();setGraphics(save.settings.graphics,false);persist();ensureDaily();resize();goTitle();applyLang();
 if(document.fonts&&document.fonts.load){document.fonts.load(`800 40px "Baloo 2"`).then(()=>txtCache.clear()).catch(()=>{});if(document.fonts.ready)document.fonts.ready.then(()=>{txtCache.clear();});}
 requestAnimationFrame(t=>{last=t;loop(t);});
-window.__G=G;G._dbg={onTap,flap,startPlay,hitPipe,paintPipeDents,paintPipeCracks,drawPipeBase,showOver,runWork,applyCustomColor,customPalette,accessoryImpactFx,accessoryArt,attachedAccessories,ACCESSORY_PART_LIMIT,renderMainIcons,paintPattern,SCARVES,GEARS,PATTERNS,HATS,DECOR_CATS,activeDecor,resolveDecor,previewDecor,setPixelLevel,pixelLevel,PIXEL_LEVELS,resetDebris,getDebris:()=>({count:debrisCount,canvas:debrisLayer}),pipeImpactFx,getImpactArt,detachableWings,IMPACT_PART_LIMIT,getImpactCacheSize:()=>impactArtCache.size,updPlay,previewSpecies,modern,renderShop,cemeteryGhostAlpha,setTod,shopList,speciesGroupOf,INSECTS,preview,drawWeatherMoon,moonWeatherState,drawBuddhistFlag,drawPagodaFlag,BUDDHIST_COLORS,renderModal,setGraphics,gfxMode,renderGraphics,graphicsPreview,paintSmoothScene,GRAPHICS,SAVE_LIMIT,packSave,unpackSave,persist,load,loadGhost,storeGhost,encodeGhost,decodeGhost,ghostPoint,recordFlight,getSave:()=>save,getStorage:()=>({bytes:storageBytes,ok:storageOK}),getArtBytes:()=>artBytes,clearGraphicsCache,openModal,closeModal,LANDMARKS,genSeg,genFar,genSky,BIOMES,SFX,getBird,renderBird,BBX,BBY,BBW,BBH,SPECIES,getPipe,groundCv,changeWeather,advanceWeather,initWeather,update,draw,drawPipe,startReady,startPlay,spawnPipe,resize,weatherBirdHit,rainSplash,updBirdWeather,updParts,updPipeDrips,pipeDripSpec,addDent,birdSnowLayers,drawBird,pipeSnowDentClip,drawVietnamFlag,paintTet,segSurf,genSegWx,buildBgTop,updBgWeather,genFarSnow,genJointSnow,paintGoldenRice,paintApartments,BGS,addSeg,paintVietnamPagoda,initCemeteryVariant,getMonkSprite,drawCemeteryRitual,addPipeCrack,drawPipeCracks,updDying,die,VIEW,viewLayout,toggleOrientation,cancelViewTransition,refreshOrientationUI,remapView,loop};
+
+/* =====================================================================
+   BLINDBOX: 20 loài bán bằng xu, 49 loài chỉ mở bằng Blindbox.
+   Mỗi 30 phút có 1 lượt mở miễn phí (không cộng dồn), hoặc mở bằng 30 xu.
+   ===================================================================== */
+const SHOP_SPECIES=ORIG_SPECIES_IDS.map((id,i)=>[id,SPECIES[id].price,i]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]).slice(0,20).map(x=>x[0]);
+const BOX_SPECIES=Object.keys(SPECIES).filter(id=>!SHOP_SPECIES.includes(id));
+const BOX_SET=new Set(BOX_SPECIES);
+const RARE_SET=new Set(['phoenix','lac','peacock','eagle','crane','paradise','rong','kylan','ptero','tri','hornbill','cadu'].filter(id=>BOX_SET.has(id)));
+const BOX_PRICE=30,BOX_FREE_MS=30*60*1000,BOX_DUP={common:20,rare:30},BOX_RARE_P=.15;
+function isBoxSpecies(id){return BOX_SET.has(id);}
+function boxNow(){return Date.now();}
+function boxFreeLeft(){const b=save.box;if(!b)return 0;let left=(b.next||0)-boxNow();if(left>BOX_FREE_MS){b.next=boxNow()+BOX_FREE_MS;left=BOX_FREE_MS;}return Math.max(0,left);}
+function boxFreeReady(){return boxFreeLeft()<=0;}
+function fmtMMSS(ms){const t=Math.ceil(ms/1000),m=Math.floor(t/60),s=t%60;return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+// Bóng đen bí ẩn: đúng hình dáng loài, tô đen toàn thân
+const silCache=new Map();
+function silhouettePreview(id){const key=gfxMode()+'|'+id;let base=silCache.get(key);
+  if(!base){base=mkCanvas(192,144);const g=base.getContext('2d');g.scale(3,3);g.imageSmoothingEnabled=smooth();g.fillStyle='#4ec0ca';g.fillRect(0,0,64,48);
+    const sp=renderBird(id,'natural',1,'none','none',0,BIRD_PX),t=mkCanvas(sp.width,sp.height),tg=t.getContext('2d');tg.drawImage(sp,0,0);tg.globalCompositeOperation='source-in';tg.fillStyle='#17141f';tg.fillRect(0,0,t.width,t.height);
+    g.drawImage(t,32+BBX,26+BBY,BBW,BBH);silCache.set(key,base);}
+  const c=mkCanvas(base.width,base.height);c.getContext('2d').drawImage(base,0,0);return c;}
+
+// ---------- Nút hộp quà + đồng hồ trên màn hình chính ----------
+function renderGiftIcon(){const b=$('bGift');if(!b)return;const dot='<i class="gdot"></i>';
+  b.innerHTML=(legacy()?'🎁':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="9" width="17" height="11.5" rx="1.5"/><path d="M2.5 9h19v-3h-19z"/><path d="M12 6v14.5"/><path d="M12 6c-1.5-3-5.5-3.5-5.5-1 0 1.5 2.5 1.6 5.5 1zM12 6c1.5-3 5.5-3.5 5.5-1 0 1.5-2.5 1.6-5.5 1z"/></svg>')+dot;}
+let giftLastText='';
+function updateGiftUI(){const b=$('bGift'),t=$('giftTimer');if(!b||!t)return;const ready=boxFreeReady();
+  b.classList.toggle('ready',ready);const text=ready?L('Miễn phí!','Free!'):fmtMMSS(boxFreeLeft());if(text!==giftLastText){t.textContent=text;giftLastText=text;}
+  if(BXS.open&&!BXS.spinning)renderBoxButtons();}
+setInterval(updateGiftUI,1000);
+
+// ---------- Vẽ thẻ "vỉ đồ chơi": bìa giấy phía sau + lớp nhựa bọc 3D ----------
+const boxArtCache=new Map();
+function boxSpeciesArt(id,size){const key=id+'|'+size;let c=boxArtCache.get(key);if(c)return c;
+  const old=previewGraphicsMode;previewGraphicsMode='vector';try{const px=Math.max(1,size/BBW);c=renderBird(id,'natural',0,'none','none',0,px);}finally{previewGraphicsMode=old;}
+  boxArtCache.set(key,c);return c;}
+function rr(g,x,y,w,h,r){g.beginPath();g.roundRect(x,y,w,h,r);}
+const BOX_PALETTES=[['#ffd36e','#ff9b54'],['#9be7ff','#4fa3ff'],['#b8f28a','#43b88a'],['#ffb3d1','#ff6f9f'],['#ffe7a1','#ffbf3f'],['#cdb6ff','#8a6cff']];
+const boxCardCache=new Map();
+function boxCard(id,w){const key=id+'|'+w;let c=boxCardCache.get(key);if(c)return c;
+  const h=Math.round(w*4/3),rare=RARE_SET.has(id),S=SPECIES[id];c=mkCanvas(w,h);const g=c.getContext('2d'),k=w/100;
+  // Bìa giấy
+  const pal=rare?['#7b4dff','#ff5fa8']:BOX_PALETTES[(BOX_SPECIES.indexOf(id)+6)%6];
+  const bg=g.createLinearGradient(0,0,w,h);bg.addColorStop(0,pal[0]);bg.addColorStop(1,pal[1]);
+  rr(g,1.5*k,1.5*k,w-3*k,h-3*k,9*k);g.fillStyle=bg;g.fill();g.lineWidth=2.4*k;g.strokeStyle='#3b2a35';g.stroke();
+  g.save();rr(g,1.5*k,1.5*k,w-3*k,h-3*k,9*k);g.clip();g.globalAlpha=.16;g.fillStyle='#fff';
+  for(let y=-10*k;y<h;y+=14*k)for(let x=((y/(14*k))|0)%2?0:7*k;x<w;x+=14*k){g.beginPath();g.arc(x,y,2.2*k,0,7);g.fill();}
+  g.globalAlpha=1;if(rare){g.fillStyle='#ffffff26';for(let i=0;i<5;i++){g.beginPath();g.moveTo(-20*k+i*34*k,h);g.lineTo(10*k+i*34*k,0);g.lineTo(22*k+i*34*k,0);g.lineTo(-8*k+i*34*k,h);g.closePath();g.fill();}}g.restore();
+  // Lỗ treo trên đầu vỉ
+  g.save();g.globalCompositeOperation='destination-out';rr(g,w/2-13*k,6*k,26*k,7*k,3.5*k);g.fill();g.restore();
+  rr(g,w/2-13*k,6*k,26*k,7*k,3.5*k);g.lineWidth=1.4*k;g.strokeStyle='#3b2a3588';g.stroke();
+  // Băng tên ở mép dưới
+  const by=h-26*k;rr(g,8*k,by,w-16*k,18*k,6*k);g.fillStyle='#fffdf4';g.fill();g.lineWidth=1.6*k;g.strokeStyle='#3b2a35';g.stroke();
+  g.fillStyle='#3b2a35';g.textAlign='center';g.textBaseline='middle';let fs=10.5*k;const nm=tr(S.name);g.font=`800 ${fs}px ${FONT}`;while(g.measureText(nm).width>w-24*k&&fs>6*k){fs-=.5*k;g.font=`800 ${fs}px ${FONT}`;}g.fillText(nm,w/2,by+9.5*k);
+  // Khay nhựa: bóng đổ, nền trong, hình loài, mặt nhựa phồng có vệt sáng
+  const bx=11*k,bt=18*k,bw=w-22*k,bh=by-bt-6*k;
+  g.save();rr(g,bx+2*k,bt+3*k,bw,bh,12*k);g.fillStyle='#0000002a';g.fill();g.restore();
+  g.save();rr(g,bx,bt,bw,bh,12*k);g.clip();const sky=g.createLinearGradient(0,bt,0,bt+bh);sky.addColorStop(0,'#eaf9ff');sky.addColorStop(1,'#bfe9f5');g.fillStyle=sky;g.fillRect(bx,bt,bw,bh);
+  const art=boxSpeciesArt(id,Math.round(bw*1.02));const aw=bw*1.02,ah=aw*BBH/BBW;g.drawImage(art,bx+(bw-aw)/2+bw*.02,bt+(bh-ah)/2+bh*.04,aw,ah);
+  const gl=g.createLinearGradient(bx,bt,bx+bw,bt+bh);gl.addColorStop(0,'#ffffff70');gl.addColorStop(.28,'#ffffff10');gl.addColorStop(.62,'#ffffff00');gl.addColorStop(1,'#ffffff30');g.fillStyle=gl;g.fillRect(bx,bt,bw,bh);
+  g.globalAlpha=.55;g.fillStyle='#fff';g.beginPath();g.ellipse(bx+bw*.24,bt+bh*.16,bw*.17,bh*.05,-.5,0,7);g.fill();g.globalAlpha=.3;g.beginPath();g.ellipse(bx+bw*.8,bt+bh*.86,bw*.09,bh*.03,-.5,0,7);g.fill();g.restore();
+  rr(g,bx,bt,bw,bh,12*k);g.lineWidth=2.2*k;g.strokeStyle='#ffffffd0';g.stroke();rr(g,bx+2.2*k,bt+2.2*k,bw-4.4*k,bh-4.4*k,10*k);g.lineWidth=1*k;g.strokeStyle='#7fb7c955';g.stroke();
+  if(rare){g.save();rr(g,1.5*k,1.5*k,w-3*k,h-3*k,9*k);g.clip();g.translate(w-22*k,22*k);g.rotate(Math.PI/4);
+    const rb=g.createLinearGradient(0,-8*k,0,8*k);rb.addColorStop(0,'#fff27a');rb.addColorStop(1,'#ffb81f');g.fillStyle=rb;g.fillRect(-40*k,-7.5*k,80*k,15*k);
+    g.lineWidth=1.6*k;g.strokeStyle='#3b2a35';g.beginPath();g.moveTo(-40*k,-7.5*k);g.lineTo(40*k,-7.5*k);g.moveTo(-40*k,7.5*k);g.lineTo(40*k,7.5*k);g.stroke();
+    g.fillStyle='#7a2a00';g.font=`800 ${8.6*k}px ${FONT}`;g.textAlign='center';g.textBaseline='middle';g.fillText(L('HIẾM','RARE'),0,.6*k);g.restore();}
+  boxCardCache.set(key,c);if(boxCardCache.size>140)boxCardCache.delete(boxCardCache.keys().next().value);return c;}
+
+// ---------- Ảnh nền: lớp họa tiết thẻ nhỏ (nhạt) + ảnh 6 loài chụp chung (nửa trên) ----------
+function paintBoxBackground(){const cv2=$('boxBg'),r=$('boxScr').getBoundingClientRect(),dpr=Math.min(2.5,window.devicePixelRatio||1);
+  const w=Math.max(1,Math.round(r.width*dpr)),h=Math.max(1,Math.round(r.height*dpr));if(cv2.width!==w)cv2.width=w;if(cv2.height!==h)cv2.height=h;const g=cv2.getContext('2d'),k=w/r.width;
+  g.fillStyle='#f4ecdc';g.fillRect(0,0,w,h);
+  // Lớp dưới: thẻ nhỏ xếp so le theo hàng, rất nhạt
+  const cw=34*k*u,ch=cw*4/3,gx=cw*.55,gy=ch*.35;g.save();g.globalAlpha=.13;
+  for(let row=0,y=-ch*.3;y<h;row++,y+=ch+gy)for(let x=(row%2?-(cw+gx)/2:0)-cw*.2;x<w;x+=cw+gx){const pal=BOX_PALETTES[(row*3+Math.round(x/cw))%6&7]||BOX_PALETTES[0];
+    rr(g,x,y,cw,ch,cw*.12);g.fillStyle=pal[1];g.fill();rr(g,x+cw*.14,y+ch*.16,cw*.72,ch*.56,cw*.16);g.fillStyle='#ffffff';g.fill();
+    g.fillStyle=pal[1];g.font=`800 ${cw*.36}px ${FONT}`;g.textAlign='center';g.textBaseline='middle';g.fillText('?',x+cw/2,y+ch*.45);}
+  g.restore();
+  // Nửa trên: khung ảnh "chụp chung"
+  const top=(BXS.layout.safeTop+44)*k*u,phMax=h/2-top-6*k*u,portrait=h>w;let pw=Math.min(w-20*k*u,phMax*1.5),ph=phMax;
+  if(portrait){pw=Math.min(pw,w*.7);ph=Math.min(phMax,pw*1.02);}
+  const px0=(w-pw)/2,py0=top+4*k*u+(phMax-ph)/2;
+  g.save();g.translate(px0+pw/2,py0+ph/2);g.rotate(-.025);g.translate(-pw/2,-ph/2);
+  g.fillStyle='#00000030';rr(g,4*k*u,6*k*u,pw,ph,8*k*u);g.fill();
+  rr(g,0,0,pw,ph,8*k*u);g.fillStyle='#fffdf6';g.fill();g.lineWidth=2*k*u;g.strokeStyle='#3b2a35';g.stroke();
+  const ix=9*k*u,iy=9*k*u,iw=pw-18*k*u,ih=ph-22*k*u;g.save();rr(g,ix,iy,iw,ih,5*k*u);g.clip();
+  const sky=g.createLinearGradient(0,iy,0,iy+ih);sky.addColorStop(0,'#7fd4f0');sky.addColorStop(.7,'#d2f2f6');sky.addColorStop(1,'#fff2c9');g.fillStyle=sky;g.fillRect(ix,iy,iw,ih);
+  g.globalAlpha=.25;g.fillStyle='#fff';for(let i=0;i<10;i++){g.beginPath();g.moveTo(ix+iw*.5,iy+ih*.95);const a=-Math.PI+i*Math.PI/9.5;g.lineTo(ix+iw*.5+Math.cos(a)*iw,iy+ih*.95+Math.sin(a)*iw);g.lineTo(ix+iw*.5+Math.cos(a+.08)*iw,iy+ih*.95+Math.sin(a+.08)*iw);g.closePath();g.fill();}g.globalAlpha=1;
+  g.fillStyle='#8fd16a';g.beginPath();g.ellipse(ix+iw/2,iy+ih*1.02,iw*.75,ih*.22,0,0,7);g.fill();g.fillStyle='#6cb84e';g.beginPath();g.ellipse(ix+iw/2,iy+ih*1.08,iw*.8,ih*.2,0,0,7);g.fill();
+  const rnd=mulberry32(77);for(let i=0;i<46;i++){g.fillStyle=['#ff5f7a','#ffd23a','#5ec8ff','#8be36a','#c58cff'][i%5];g.save();g.translate(ix+rnd()*iw,iy+rnd()*ih*.75);g.rotate(rnd()*6);g.fillRect(-2*k*u,-1*k*u,4*k*u,2*k*u);g.restore();}
+  const cast=[['kylan',.17,.6,.42,-.06,0],['rong',.5,.48,.48,0,0],['phoenix',.83,.6,.42,.06,0],['heo',.24,.86,.36,-.08,1],['classic',.52,.88,.34,0,1],['lac',.8,.86,.36,.08,1]];
+  for(const [id,cx,cy,sz,rot,f] of cast){if(!SPECIES[id])continue;const aw=iw*sz,ah=aw*BBH/BBW,old=previewGraphicsMode;previewGraphicsMode='vector';let a;try{a=renderBird(id,'natural',f?2:0,'none','none',0,Math.max(1,aw/BBW));}finally{previewGraphicsMode=old;}
+    g.save();g.translate(ix+iw*cx,iy+ih*cy);g.rotate(rot);g.fillStyle='#0000001c';g.beginPath();g.ellipse(0,ah*.32,aw*.28,ah*.07,0,0,7);g.fill();g.drawImage(a,-aw/2,-ah/2,aw,ah);g.restore();}
+  g.restore();
+  g.restore();}
+
+// ---------- Thanh cuộn thẻ + con dấu chỉ ----------
+const BXS={open:false,spinning:false,order:[],off:0,v:0,v0:0,last:0,raf:0,layout:{},spin:null,lastTick:-1,fx:[],winT:0};
+function boxOrder(){const common=BOX_SPECIES.filter(id=>!RARE_SET.has(id)),rare=BOX_SPECIES.filter(id=>RARE_SET.has(id));
+  const sh=a=>{const r=mulberry32(20261103);for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+  return sh(common).concat(sh(rare));}  // các thẻ hiếm nối tiếp nhau thành một cụm
+function layoutBox(){const r=$('boxScr').getBoundingClientRect(),Hc=r.height,Wc=r.width;BXS.layout.safeTop=($('probe').offsetHeight||0)/u;
+  const stripH=Math.min(Hc*.21,Wc*.34,u*150),top=Hc*.5+Hc*.06,dpr=Math.min(2.5,window.devicePixelRatio||1);
+  const sc=$('boxStrip');sc.style.top=top+'px';sc.style.height=stripH+'px';sc.style.width=Wc+'px';sc.width=Math.max(1,Math.round(Wc*dpr));sc.height=Math.max(1,Math.round(stripH*dpr));
+  const cardW=Math.round(stripH*.6*dpr)/dpr,cardH=cardW;BXS.layout={...BXS.layout,Wc,Hc,stripH,top,dpr,cardW,cardH,gap:cardW*.12,pitch:cardW*1.12};
+  $('boxBtns').style.top=(top+stripH+Hc*.045)+'px';
+  BXS.v0=BXS.layout.pitch*.55;paintBoxBackground();}
+
+// Ô loài trên thanh cuộn: ô vuông bo góc màu xanh; loài hiếm có nền sáng và chùm tia vàng phía sau.
+const boxTileCache=new Map();
+function boxTile(id,sz){const key=id+'|'+sz;let t=boxTileCache.get(key);if(t)return t;const rare=RARE_SET.has(id),c=mkCanvas(sz,sz),g=c.getContext('2d'),r=sz*.17;
+  rr(g,sz*.02,sz*.02,sz*.96,sz*.96,r);const bg=g.createLinearGradient(0,0,0,sz);
+  if(rare){bg.addColorStop(0,'#6f9cf0');bg.addColorStop(1,'#3f6fd4');}else{bg.addColorStop(0,'#2f55b8');bg.addColorStop(1,'#22409a');}g.fillStyle=bg;g.fill();
+  g.save();g.clip();g.fillStyle='#ffffff14';g.fillRect(0,0,sz,sz*.42);g.restore();
+  g.lineWidth=sz*.02;g.strokeStyle=rare?'#bcd6ff':'#4b73cf';g.stroke();
+  t={base:c,art:boxSpeciesArt(id,Math.round(sz*.98))};boxTileCache.set(key,t);if(boxTileCache.size>160)boxTileCache.delete(boxTileCache.keys().next().value);return t;}
+function sparkle(g,x,y,r,a){g.save();g.globalAlpha=a;g.fillStyle='#fff6c4';g.beginPath();g.moveTo(x,y-r);g.quadraticCurveTo(x,y,x+r,y);g.quadraticCurveTo(x,y,x,y+r);g.quadraticCurveTo(x,y,x-r,y);g.quadraticCurveTo(x,y,x,y-r);g.fill();g.restore();}
+function drawBoxTile(g,id,x,y,sz,t,glow){const T=boxTile(id,Math.round(sz*BXS.layout.dpr)),rare=RARE_SET.has(id);
+  g.drawImage(T.base,x,y,sz,sz);
+  if(rare){g.save();rr(g,x+sz*.02,y+sz*.02,sz*.96,sz*.96,sz*.17);g.clip();const cx=x+sz/2,cy=y+sz*.52;
+    const rg=g.createRadialGradient(cx,cy,0,cx,cy,sz*.62);rg.addColorStop(0,'rgba(255,240,170,'+(.75+.25*glow)+')');rg.addColorStop(.45,'rgba(255,220,120,'+(.25+.25*glow)+')');rg.addColorStop(1,'rgba(255,220,120,0)');g.fillStyle=rg;g.fillRect(x,y,sz,sz);
+    g.translate(cx,cy);g.rotate(t/1000*.35);g.fillStyle='rgba(255,246,200,'+(.16+.18*glow)+')';
+    for(let i=0;i<14;i++){g.rotate(Math.PI*2/14);g.beginPath();g.moveTo(0,0);g.lineTo(sz*.9,-sz*.07);g.lineTo(sz*.9,sz*.07);g.closePath();g.fill();}g.restore();}
+  g.save();rr(g,x+sz*.02,y+sz*.02,sz*.96,sz*.96,sz*.17);g.clip();const aw=sz*.98,ah=aw*BBH/BBW;g.drawImage(T.art,x+(sz-aw)/2+sz*.02,y+(sz-ah)/2+sz*.05,aw,ah);g.restore();
+  if(rare){for(const[dx,dy,r,ph]of[[.16,.2,.09,0],[.84,.3,.07,1.7],[.78,.82,.06,3.1],[.22,.78,.05,4.4]])sparkle(g,x+sz*dx,y+sz*dy,sz*r*(.6+.4*Math.abs(Math.sin(t/600+ph))),.5+.5*Math.abs(Math.sin(t/700+ph)));}}
+// Khung thanh cuộn: nền xanh, viền vàng, hai đầu có tai trang trí kèm ngôi sao.
+function drawStripFrame(g,Wc,sh,inner){const fy=sh*.13,fh=sh*.74,cap=fh*.36,x0=cap*.62,x1=Wc-cap*.62;
+  g.save();for(const [cx,dir] of [[x0,-1],[x1,1]]){rr(g,cx-cap*.55,fy+fh*.18,cap*1.1,fh*.64,cap*.28);g.fillStyle='#2f63c9';g.fill();g.lineWidth=Math.max(2,sh*.02);g.strokeStyle='#f2cf72';g.stroke();
+    sparkle(g,cx+dir*cap*.16,fy+fh/2,cap*.26,1);}
+  rr(g,x0,fy,x1-x0,fh,fh*.16);const bg=g.createLinearGradient(0,fy,0,fy+fh);bg.addColorStop(0,'#3d78e0');bg.addColorStop(1,'#2a5bc0');g.fillStyle=bg;g.fill();
+  g.lineWidth=Math.max(2.5,sh*.026);g.strokeStyle='#f2cf72';g.stroke();rr(g,x0+sh*.03,fy+sh*.03,x1-x0-sh*.06,fh-sh*.06,fh*.13);g.lineWidth=Math.max(1,sh*.008);g.strokeStyle='#ffffff40';g.stroke();g.restore();
+  inner.x=x0+sh*.05;inner.y=fy+sh*.05;inner.w=x1-x0-sh*.1;inner.h=fh-sh*.1;}
+function drawStrip(t){const L0=BXS.layout,sc=$('boxStrip'),g=sc.getContext('2d'),d=L0.dpr;g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,sc.width,sc.height);
+  g.setTransform(d,0,0,d,0,0);const Wc=L0.Wc,sh=L0.stripH,inner={};drawStripFrame(g,Wc,sh,inner);
+  const N=BXS.order.length,P=L0.pitch,sz=L0.cardW,cy=inner.y+(inner.h-sz)/2,first=Math.floor(BXS.off/P)-1;
+  const glow=.5-.5*Math.cos(t/1000*Math.PI*2/1.6);  // ánh sáng loài hiếm: mờ → rõ → mờ, lặp liên tục
+  g.save();g.beginPath();g.rect(inner.x,inner.y-sh*.02,inner.w,inner.h+sh*.04);g.clip();
+  for(let i=first;i<first+Math.ceil(Wc/P)+3;i++){const id=BXS.order[((i%N)+N)%N],x=i*P-BXS.off+(P-sz)/2;if(x>Wc||x+sz<0)continue;drawBoxTile(g,id,x,cy,sz,t,glow);}
+  g.restore();
+  // Con dấu chỉ (đầu nhọn) ở chính giữa, trên và dưới khung
+  const cx=Wc/2,fy=sh*.13,fh=sh*.74;g.save();g.fillStyle='#ff4757';g.strokeStyle='#3b2a35';g.lineWidth=2;
+  for(const [y0,dir] of [[fy-sh*.1,1],[fy+fh+sh*.1,-1]]){g.beginPath();g.moveTo(cx-11,y0);g.lineTo(cx+11,y0);g.lineTo(cx,y0+dir*sh*.15);g.closePath();g.fill();g.stroke();}
+  g.globalAlpha=.75;g.fillStyle='#fff';g.fillRect(cx-1,fy+fh*.08,2,fh*.84);g.restore();}
+function boxIndexAt(off){const P=BXS.layout.pitch,x=off+BXS.layout.Wc/2;return Math.floor(x/P);}
+function boxLoop(t){if(!BXS.open)return;const dt=Math.min(.05,(t-(BXS.last||t))/1000);BXS.last=t;
+  if(BXS.spin){const sp=BXS.spin,e=(t-sp.t0)/1000,v0=sp.v0,vm=sp.vm;let s0;
+    const s1=4*v0+8/3*(vm-v0);
+    if(e<4){const x=e/4;s0=v0*e+(vm-v0)*4*(x*x-x*x*x/3);}else if(e<6)s0=s1+vm*(e-4);else if(e<9){const uu=(e-6)/3;s0=s1+2*vm+vm*(1-Math.pow(1-uu,3));}else s0=sp.D;
+    BXS.off=sp.off0+Math.min(s0,sp.D);
+    const idx=boxIndexAt(BXS.off);if(idx!==BXS.lastTick){BXS.lastTick=idx;if(e<8.95)SFX.play('click');}
+    if(e>=9){BXS.spin=null;BXS.v=0;setTimeout(()=>showBoxWin(),380);}}
+  else if(BXS.drag){BXS.v=0;}
+  else if(!BXS.spinning){BXS.v+=(BXS.v0-BXS.v)*Math.min(1,dt*2);BXS.off+=BXS.v*dt;}
+  drawStrip(t);if($('boxWin').classList.contains('show'))drawBoxFx(dt);
+  BXS.raf=requestAnimationFrame(boxLoop);}
+
+// ---------- Nút mở (đổi giao diện theo kiểu đồ họa qua lớp .btn sẵn có) ----------
+function renderBoxButtons(){const el=$('boxBtns');if(!el)return;const ready=boxFreeReady(),busy=BXS.spinning;
+  $('boxCoinTxt').textContent=save.coins;$('boxClose').disabled=busy;
+  const key=[ready,busy,ready?'':fmtMMSS(boxFreeLeft()),save.coins>=BOX_PRICE,isEN()].join('|');if(el.dataset.key===key)return;el.dataset.key=key;el.innerHTML='';
+  if(ready){const b=document.createElement('button');b.className='btn org one';b.textContent=L('🎁 Mở miễn phí','🎁 Open for free');b.disabled=busy;b.onclick=()=>startBoxSpin(true);el.appendChild(b);}
+  else{const a=document.createElement('button');a.className='btn';a.disabled=true;a.textContent=L('Miễn phí sau ','Free in ')+fmtMMSS(boxFreeLeft());el.appendChild(a);
+    const b=document.createElement('button');b.className='btn org';const enough=save.coins>=BOX_PRICE;b.disabled=busy||!enough;
+    b.innerHTML=enough?L(`Mở với <i class="coin"></i>${BOX_PRICE} xu`,`Open for <i class="coin"></i>${BOX_PRICE}`):L(`Cần <i class="coin"></i>${BOX_PRICE} xu`,`Need <i class="coin"></i>${BOX_PRICE}`);b.onclick=()=>startBoxSpin(false);el.appendChild(b);}
+  $('boxHint').textContent='';if(0)$('boxHint').textContent=L(`Đã mở ${own}/${BOX_SPECIES.length} loài · Loài hiếm ${Math.round(BOX_RARE_P*100)}% · Trùng loài đổi thành ${BOX_DUP.common}/${BOX_DUP.rare} xu`,`Unlocked ${own}/${BOX_SPECIES.length} · Rare ${Math.round(BOX_RARE_P*100)}% · Duplicates become ${BOX_DUP.common}/${BOX_DUP.rare} coins`);}
+function openBox(){if(BXS.open)return;SFX.play('click');BXS.open=true;if(!BXS.order.length)BXS.order=boxOrder();$('boxScr').classList.add('show');$('boxWin').classList.remove('show');
+  layoutBox();BXS.v=BXS.v0;BXS.last=0;delete $('boxBtns').dataset.key;renderBoxButtons();cancelAnimationFrame(BXS.raf);BXS.raf=requestAnimationFrame(boxLoop);}
+function closeBox(){if(BXS.spinning)return;BXS.open=false;cancelAnimationFrame(BXS.raf);$('boxScr').classList.remove('show');refreshTitle();updateGiftUI();}
+// Kết quả được chọn và ghi vào bản lưu NGAY khi bấm (không mất lượt nếu tắt game giữa chừng); phần quay chỉ là hiệu ứng.
+function startBoxSpin(free){if(BXS.spinning||BXS.spin)return;BXS.drag=null;
+  if(free){if(!boxFreeReady())return;save.box.next=boxNow()+BOX_FREE_MS;}
+  else{if(save.coins<BOX_PRICE){toast(L('Chưa đủ xu!','Not enough coins!'));return;}save.coins-=BOX_PRICE;}
+  const rare=R()<BOX_RARE_P,pool=BOX_SPECIES.filter(id=>RARE_SET.has(id)===rare),id=pick(pool),dup=save.owned.species.includes(id),gain=dup?(rare?BOX_DUP.rare:BOX_DUP.common):0;
+  if(dup)save.coins+=gain;else save.owned.species.push(id);persist();checkAch(null);
+  BXS.result={id,dup,gain,rare};BXS.spinning=true;delete $('boxBtns').dataset.key;renderBoxButtons();
+  // Tính quãng đường để con dấu dừng đúng giữa thẻ của loài trúng (lệch nhẹ ngẫu nhiên cho hồi hộp)
+  const L0=BXS.layout,P=L0.pitch,N=BXS.order.length,total=P*N,v0=Math.max(BXS.v,BXS.v0*.6),vmNom=P*15,Dnom=4/3*v0+17/3*vmNom;
+  const k=BXS.order.indexOf(id),jit=(R()-.5)*.6*L0.cardW;let target=k*P+P/2-L0.Wc/2+jit;
+  while(target<BXS.off+Dnom)target+=total;const D=target-BXS.off,vm=(D-4/3*v0)*3/17;
+  BXS.spin={t0:performance.now(),off0:BXS.off,D,v0,vm};BXS.lastTick=boxIndexAt(BXS.off);SFX.play('swoosh');}
+// ---------- Màn chúc mừng ----------
+// Vỉ nhận thưởng: viền vàng phát sáng, nền cam hoa văn xoắn, lỗ treo, tên loài ở trên, loài ở giữa; loài hiếm có dấu mộc tròn.
+
+function boxWinArtCommon(id,w){const h=Math.round(w*1.32),c=mkCanvas(w,h),g=c.getContext('2d'),k=w/100;
+  rr(g,0,0,w,h,4*k);g.save();g.clip();
+  const bg=g.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#e0332d');bg.addColorStop(1,'#c8221f');g.fillStyle=bg;g.fillRect(0,0,w,h);
+  g.strokeStyle='#a81a1866';g.lineWidth=1.25*k;for(let yy=-8*k,row=0;yy<h+8*k;yy+=14*k,row++)for(let xx=-8*k+(row%2)*7*k;xx<w+8*k;xx+=14*k){g.beginPath();for(let a=0;a<Math.PI*3.2;a+=.25){const r=a*1.1*k;const px=xx+Math.cos(a)*r,py=yy+Math.sin(a)*r;a?g.lineTo(px,py):g.moveTo(px,py);}g.stroke();}
+  // Vòm trang trí trên và dưới
+  for(const [cy,dir] of [[0,1],[h,-1]])for(const cx of [w*.2,w*.5,w*.8]){for(const [r,col,lw] of [[16*k,'#ffe7a0',2.4*k],[13*k,'#3fb8a8',3*k],[10*k,'#ffe7a0',1.6*k]]){g.beginPath();g.arc(cx,cy,r,dir>0?0:Math.PI,dir>0?Math.PI:Math.PI*2);g.lineWidth=lw;g.strokeStyle=col;g.stroke();}}
+  g.restore();
+  // Lỗ treo
+  g.save();g.globalCompositeOperation='destination-out';rr(g,w/2-17*k,11*k,34*k,8*k,4*k);g.fill();g.beginPath();g.arc(w/2,11*k,5*k,Math.PI,0);g.fill();g.restore();
+  // Tên loài
+  const nm=tr(SPECIES[id].name);let fs=9.5*k;g.font=`800 ${fs}px ${FONT}`;while(g.measureText(nm).width>w-20*k&&fs>6*k){fs-=.4*k;g.font=`800 ${fs}px ${FONT}`;}
+  g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';g.lineWidth=2.4*k;g.strokeStyle='#7a1210';g.strokeText(nm,w/2,29*k);g.fillStyle='#fffaf0';g.fillText(nm,w/2,29*k);
+  // Khay nhựa trong suốt: bóng tối viền, lớp nhựa phồng có vệt sáng
+  const bx=8*k,bt=37*k,bw=w-16*k,bh=h-bt-16*k;
+  rr(g,bx,bt,bw,bh,8*k);g.fillStyle='#7a0d0d33';g.fill();
+  rr(g,bx+5*k,bt+5*k,bw-10*k,bh-10*k,6*k);g.fillStyle='#ffffff14';g.fill();g.lineWidth=1.2*k;g.strokeStyle='#ffffff40';g.stroke();
+  const aw=w*.9,ah=aw*BBH/BBW,art=boxSpeciesArt(id,Math.round(aw));g.drawImage(art,(w-aw)/2+2*k,bt+bh*.52-ah/2,aw,ah);
+  g.save();rr(g,bx+5*k,bt+5*k,bw-10*k,bh-10*k,6*k);g.clip();g.globalAlpha=.32;g.fillStyle='#fff';
+  g.beginPath();g.moveTo(bx+8*k,bt+bh*.42);g.quadraticCurveTo(bx+10*k,bt+10*k,bx+bw*.42,bt+8*k);g.lineTo(bx+bw*.3,bt+15*k);g.quadraticCurveTo(bx+16*k,bt+17*k,bx+14*k,bt+bh*.36);g.closePath();g.fill();g.restore();
+  return c;}
+function boxWinArt(id,w){const h=Math.round(w*1.32),pad=Math.round(w*.09),c=mkCanvas(w+pad*2,h+pad*2),g=c.getContext('2d'),k=w/100,rare=RARE_SET.has(id);
+  g.translate(pad,pad);
+  g.save();g.shadowColor=rare?'#fff27a':'#ffe58a';g.shadowBlur=pad*1.1;rr(g,0,0,w,h,7*k);g.fillStyle='#ffe55a';g.fill();g.restore();
+  rr(g,0,0,w,h,7*k);const gb=g.createLinearGradient(0,0,0,h);gb.addColorStop(0,'#fff59a');gb.addColorStop(.5,'#ffd84a');gb.addColorStop(1,'#ffec7a');g.fillStyle=gb;g.fill();
+  const ix=5*k,iy=5*k,iw=w-10*k,ih=h-10*k;g.save();rr(g,ix,iy,iw,ih,4*k);g.clip();
+  const og=g.createLinearGradient(0,iy,0,iy+ih);og.addColorStop(0,'#ffb35a');og.addColorStop(.55,'#ff8a3a');og.addColorStop(1,'#ff9f4a');g.fillStyle=og;g.fillRect(ix,iy,iw,ih);
+  g.strokeStyle='#e8621f55';g.lineWidth=1.3*k;for(let yy=iy-8*k,row=0;yy<iy+ih+8*k;yy+=15*k,row++)for(let xx=ix-8*k+(row%2)*7.5*k;xx<ix+iw+8*k;xx+=15*k){g.beginPath();for(let a=0;a<Math.PI*3.2;a+=.25){const r=a*1.15*k;const px=xx+Math.cos(a)*r,py=yy+Math.sin(a)*r;a?g.lineTo(px,py):g.moveTo(px,py);}g.stroke();}
+  const ag=g.createRadialGradient(w/2,h*.6,0,w/2,h*.6,w*.55);ag.addColorStop(0,'#ffe9a055');ag.addColorStop(1,'#ffe9a000');g.fillStyle=ag;g.fillRect(ix,iy,iw,ih);
+  g.strokeStyle='#fff2a088';g.lineWidth=1.6*k;g.beginPath();g.ellipse(w/2,ih+iy+18*k,w*.42,26*k,0,Math.PI*1.15,Math.PI*1.85);g.stroke();g.restore();
+  // Lỗ treo
+  g.save();g.globalCompositeOperation='destination-out';rr(g,w/2-17*k,11*k,34*k,8*k,4*k);g.fill();g.beginPath();g.arc(w/2,11*k,5*k,Math.PI,0);g.fill();g.restore();
+  g.strokeStyle='#d8701f';g.lineWidth=1.2*k;rr(g,w/2-17*k,11*k,34*k,8*k,4*k);g.stroke();
+  // Tên loài
+  const nm=tr(SPECIES[id].name);let fs=9.5*k;g.font=`800 ${fs}px ${FONT}`;while(g.measureText(nm).width>w-20*k&&fs>6*k){fs-=.4*k;g.font=`800 ${fs}px ${FONT}`;}
+  g.textAlign='center';g.textBaseline='middle';g.lineJoin='round';g.lineWidth=2.6*k;g.strokeStyle='#8a3d12';g.strokeText(nm,w/2,29*k);g.fillStyle='#fffaf0';g.fillText(nm,w/2,29*k);
+  // Loài
+  const aw=w*.98,ah=aw*BBH/BBW,art=boxSpeciesArt(id,Math.round(aw));g.drawImage(art,(w-aw)/2+2*k,h*.56-ah/2,aw,ah);
+  // Dấu mộc tròn ánh kim cho loài hiếm
+  if(rare){const sx=w*.27,sy=h*.8,R=15*k;g.save();g.translate(sx,sy);g.rotate(-.32);
+    const hg=g.createLinearGradient(-R,-R,R,R);hg.addColorStop(0,'#c8f5c0');hg.addColorStop(.35,'#f8f0a8');hg.addColorStop(.65,'#f6c6e6');hg.addColorStop(1,'#b8e4ff');
+    g.beginPath();g.arc(0,0,R,0,7);g.fillStyle=hg;g.fill();g.lineWidth=1.6*k;g.strokeStyle='#8a7a4a';g.stroke();g.beginPath();g.arc(0,0,R*.8,0,7);g.lineWidth=.9*k;g.strokeStyle='#9a8a5a88';g.stroke();
+    g.fillStyle='#6a5a2a';g.textAlign='center';g.textBaseline='middle';g.font=`800 ${4.6*k}px ${FONT}`;g.fillText('·LUCK·',0,-R*.5);
+    g.font=`800 ${9*k}px ${FONT}`;g.lineWidth=1.6*k;g.strokeStyle='#fffbe6';g.strokeText(L('HIẾM','RARE'),0,R*.12);g.fillStyle='#7a5a1a';g.fillText(L('HIẾM','RARE'),0,R*.12);g.restore();}
+  return c;}
+
+function showBoxWin(){const r=BXS.result;if(!r)return;const w=$('boxWin'),cv2=$('boxWinCard'),L0=BXS.layout,d=L0.dpr,cw=Math.min(L0.Wc*.6,u*170,L0.Hc*.42);
+  const card=(r.rare?boxWinArt:boxWinArtCommon)(r.id,Math.round(cw*d));cv2.width=card.width;cv2.height=card.height;cv2.getContext('2d').drawImage(card,0,0);cv2.style.width=(cw*card.width/Math.round(cw*d))+'px';
+  $('boxWinTag').textContent=r.dup?L('Chúc mừng nhận được','You got'):(r.rare?L('✨ Chúc mừng nhận được loài hiếm! ✨','✨ You got a rare species! ✨'):L('🎉 Chúc mừng nhận được! 🎉','🎉 Congratulations! 🎉'));
+  $('boxWinName').textContent=tr(SPECIES[r.id].name);$('boxBack').textContent=L('Quay lại','Back');
+  const dp=$('boxDup');dp.classList.remove('show');if(r.dup){$('boxDupTxt').textContent=L(`Bạn đã có ${tr(SPECIES[r.id].name)} rồi! Tự động đổi thành +${r.gain} xu.`,`You already have the ${tr(SPECIES[r.id].name)}! Converted to +${r.gain} coins.`);setTimeout(()=>{if(w.classList.contains('show')){dp.classList.add('show');SFX.play('buy');}},900);}
+  const fx=$('boxFx');fx.width=Math.round(L0.Wc*d);fx.height=Math.round(L0.Hc*d);BXS.fx=[];BXS.winT=0;
+  w.classList.remove('show');w.classList.toggle('rare',!!r.rare);void w.offsetWidth;w.classList.add('show');SFX.play(r.rare?'ach':'power');vibrate([30,40,60]);}
+function drawBoxFx(dt){const fx=$('boxFx'),g=fx.getContext('2d'),d=BXS.layout.dpr,Wc=BXS.layout.Wc,Hc=BXS.layout.Hc;BXS.winT+=dt;
+  if(BXS.winT<6&&(BXS.fx.length<500)&&R()<dt*(BXS.winT<1.2?7:2.4)){const x=Wc*(.15+R()*.7),y=Hc*(.12+R()*.35),cols=[['#ff5f7a','#ffd23a'],['#7ee8ff','#ffffff'],['#c58cff','#ffe27a'],['#8be36a','#ffd23a']][Math.floor(R()*4)],n=46;
+    for(let i=0;i<n;i++){const a=i/n*Math.PI*2,sp=(70+R()*70)*u/1.4;BXS.fx.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1.2+R()*.5,max:1.7,c:cols[i%2]});}if(BXS.winT>.1)SFX.play('pop');}
+  g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,fx.width,fx.height);g.setTransform(d,0,0,d,0,0);
+  for(const p of BXS.fx){p.life-=dt;p.vx*=Math.exp(-1.6*dt);p.vy=p.vy*Math.exp(-1.6*dt)+60*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;const a=Math.max(0,Math.min(1,p.life/p.max*1.5));g.globalAlpha=a;g.fillStyle=p.c;g.fillRect(p.x-1.6,p.y-1.6,3.2,3.2);g.globalAlpha=a*.35;g.fillRect(p.x-p.vx*.05-1,p.y-p.vy*.05-1,2,2);}
+  g.globalAlpha=1;prune(BXS.fx,p=>p.life>0);}
+function closeBoxWin(){$('boxWin').classList.remove('show');BXS.spinning=false;BXS.result=null;BXS.v=0;delete $('boxBtns').dataset.key;renderBoxButtons();updateGiftUI();}
+on('bGift',()=>openBox());
+// Nắm kéo thanh cuộn khi chưa quay: đang nắm thì đứng yên theo tay, thả ra thì tự chạy chậm lại như cũ.
+{const sc=$('boxStrip');sc.style.touchAction='none';sc.style.cursor='grab';
+ sc.addEventListener('pointerdown',e=>{if(BXS.spinning||BXS.spin)return;BXS.drag={id:e.pointerId,x:e.clientX,off:BXS.off};try{sc.setPointerCapture(e.pointerId);}catch(err){}sc.style.cursor='grabbing';e.preventDefault();});
+ sc.addEventListener('pointermove',e=>{const d=BXS.drag;if(!d||d.id!==e.pointerId)return;BXS.off=d.off-(e.clientX-d.x);e.preventDefault();});
+ const end=e=>{const d=BXS.drag;if(!d||d.id!==e.pointerId)return;BXS.drag=null;BXS.v=0;sc.style.cursor='grab';};
+ for(const ev of ['pointerup','pointercancel','lostpointercapture'])sc.addEventListener(ev,end);}on('boxClose',()=>closeBox());on('boxBack',()=>{SFX.play('click');closeBoxWin();});
+window.addEventListener('resize',()=>{if(BXS.open)setTimeout(()=>{layoutBox();delete $('boxBtns').dataset.key;renderBoxButtons();},80);});
+renderGiftIcon();updateGiftUI();
+{const mc=$('mClose');if(mc){mc.innerHTML='<svg class="xicon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/></svg>';mc.setAttribute('aria-label',L('Đóng','Close'));}}
+
+window.__G=G;G._dbg={showBoxWin,boxWinArt,BXS,BOX_SPECIES,SHOP_SPECIES,RARE_SET,openBox,closeBox,startBoxSpin,boxCard,renderBoxButtons,updateGiftUI,boxFreeLeft,silhouettePreview,speciesShopList,onTap,flap,startPlay,hitPipe,paintPipeDents,paintPipeCracks,drawPipeBase,showOver,runWork,applyCustomColor,customPalette,accessoryImpactFx,accessoryArt,attachedAccessories,ACCESSORY_PART_LIMIT,renderMainIcons,paintPattern,SCARVES,GEARS,PATTERNS,HATS,DECOR_CATS,activeDecor,resolveDecor,previewDecor,setPixelLevel,pixelLevel,PIXEL_LEVELS,resetDebris,getDebris:()=>({count:debrisCount,canvas:debrisLayer}),pipeImpactFx,getImpactArt,detachableWings,IMPACT_PART_LIMIT,getImpactCacheSize:()=>impactArtCache.size,updPlay,previewSpecies,modern,renderShop,cemeteryGhostAlpha,setTod,shopList,speciesGroupOf,INSECTS,preview,drawWeatherMoon,moonWeatherState,drawBuddhistFlag,drawPagodaFlag,BUDDHIST_COLORS,renderModal,setGraphics,gfxMode,renderGraphics,graphicsPreview,paintSmoothScene,GRAPHICS,SAVE_LIMIT,packSave,unpackSave,persist,load,loadGhost,storeGhost,encodeGhost,decodeGhost,ghostPoint,recordFlight,getSave:()=>save,getStorage:()=>({bytes:storageBytes,ok:storageOK}),getArtBytes:()=>artBytes,clearGraphicsCache,openModal,closeModal,LANDMARKS,genSeg,genFar,genSky,BIOMES,SFX,getBird,renderBird,BBX,BBY,BBW,BBH,SPECIES,getPipe,groundCv,changeWeather,advanceWeather,initWeather,update,draw,drawPipe,startReady,startPlay,spawnPipe,resize,weatherBirdHit,rainSplash,updBirdWeather,updParts,updPipeDrips,pipeDripSpec,addDent,birdSnowLayers,drawBird,pipeSnowDentClip,drawVietnamFlag,paintTet,segSurf,genSegWx,buildBgTop,updBgWeather,genFarSnow,genJointSnow,paintGoldenRice,paintApartments,BGS,addSeg,paintVietnamPagoda,initCemeteryVariant,getMonkSprite,drawCemeteryRitual,addPipeCrack,drawPipeCracks,updDying,die,VIEW,viewLayout,toggleOrientation,cancelViewTransition,refreshOrientationUI,remapView,loop};
 })();
 </script>
 </body>
